@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <properties resource="datasource.properties"/>
+    <context id="default" targetRuntime="MyBatis3">
+        <!--可选,创建class时的注释控制-->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <jdbcConnection driverClass="${db.driverClassName}" connectionURL="${db.url}" userId="${db.username}"
+                        password="${db.password}"/>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+        <!--生成java文件的配置-->
+        <javaModelGenerator targetPackage="com.shinvi.mall.pojo.domain" targetProject="./src/main/java">
+            <!--是否允许子包-->
+            <property name="enableSubPackages" value="false"/>
+            <!--是否添加构造函数-->
+            <property name="constructorBased" value="true"/>
+            <!--是否对字符串数据trim-->
+            <property name="trimStrings" value="true"/>
+            <!--是否不可变,即没有setter方法-->
+            <property name="immutable" value="false"/>
+        </javaModelGenerator>
+        <!--生成xml文件配置-->
+        <sqlMapGenerator targetPackage="mappers" targetProject="./src/main/resources">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!--生成xml实现的dao层配置-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.shinvi.mall.dao" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="false"/>
+        </javaClientGenerator>
+
+        <table tableName="mmall_cart" domainObjectName="CartDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="mmall_category" domainObjectName="CategoryDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="mmall_order" domainObjectName="OrderDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="mmall_order_item" domainObjectName="OrderItemDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="mmall_pay_info" domainObjectName="PayInfoDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="mmall_product" domainObjectName="ProductDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false">
+            <columnOverride column="detail" jdbcType="VARCHAR" />
+            <columnOverride column="sub_images" jdbcType="VARCHAR"/>
+        </table>
+        <table tableName="mmall_shipping" domainObjectName="ShippingDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
+        <table tableName="mmall_user" domainObjectName="UserDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
+    </context>
+</generatorConfiguration>
