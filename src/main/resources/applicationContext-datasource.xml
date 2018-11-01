@@ -35,6 +35,7 @@
         <property name="driverClassName" value="${db.driverClassName}"/>
         <property name="url" value="${db.url}"/>
         <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
         <property name="initialSize" value="${db.initSize}"/>
         <property name="maxActive" value="${db.maxActive}"/>
         <property name="maxIdle" value="${db.maxIdle}"/>

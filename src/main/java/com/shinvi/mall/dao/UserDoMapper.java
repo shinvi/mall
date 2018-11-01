@@ -14,4 +14,10 @@ public interface UserDoMapper {
     int updateByPrimaryKeySelective(UserDo record);
 
     int updateByPrimaryKey(UserDo record);
+
+    int countUsername(String username);
+
+    int countEmail(String email);
+
+    UserDo selectLogin(String username,String password);
 }
