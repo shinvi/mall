@@ -1,6 +1,5 @@
 package com.shinvi.mall.pojo.domain;
 
-import java.util.Date;
 
 public class CategoryDo {
     private Integer id;
@@ -13,18 +12,12 @@ public class CategoryDo {
 
     private Integer sortOrder;
 
-    private Date createTime;
-
-    private Date updateTime;
-
-    public CategoryDo(Integer id, Integer parentId, String name, Boolean status, Integer sortOrder, Date createTime, Date updateTime) {
+    public CategoryDo(Integer id, Integer parentId, String name, Boolean status, Integer sortOrder) {
         this.id = id;
         this.parentId = parentId;
         this.name = name;
         this.status = status;
         this.sortOrder = sortOrder;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public CategoryDo() {
@@ -69,21 +62,5 @@ public class CategoryDo {
 
     public void setSortOrder(Integer sortOrder) {
         this.sortOrder = sortOrder;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

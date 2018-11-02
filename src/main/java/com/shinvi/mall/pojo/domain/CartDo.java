@@ -1,6 +1,5 @@
 package com.shinvi.mall.pojo.domain;
 
-import java.util.Date;
 
 public class CartDo {
     private Integer id;
@@ -13,18 +12,12 @@ public class CartDo {
 
     private Integer checked;
 
-    private Date createTime;
-
-    private Date updateTime;
-
-    public CartDo(Integer id, Integer userId, Integer productId, Integer quantity, Integer checked, Date createTime, Date updateTime) {
+    public CartDo(Integer id, Integer userId, Integer productId, Integer quantity, Integer checked) {
         this.id = id;
         this.userId = userId;
         this.productId = productId;
         this.quantity = quantity;
         this.checked = checked;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public CartDo() {
@@ -69,21 +62,5 @@ public class CartDo {
 
     public void setChecked(Integer checked) {
         this.checked = checked;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

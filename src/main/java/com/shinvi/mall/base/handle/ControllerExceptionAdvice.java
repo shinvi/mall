@@ -1,6 +1,5 @@
 package com.shinvi.mall.base.handle;
 
-import com.github.pagehelper.util.StringUtil;
 import com.shinvi.mall.base.exception.ServerResponseException;
 import com.shinvi.mall.pojo.vo.ServerResponse;
 import org.apache.commons.lang3.StringUtils;

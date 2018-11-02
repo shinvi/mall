@@ -12,6 +12,9 @@ public class MD5Util {
     }
 
     public static String getMD5(String val) {
+        if (val == null) {
+            return "";
+        }
         MessageDigest md5 = null;
 
         try {
@@ -32,7 +35,7 @@ public class MD5Util {
         byte[] var4 = bytes;
         int var5 = bytes.length;
 
-        for(int var6 = 0; var6 < var5; ++var6) {
+        for (int var6 = 0; var6 < var5; ++var6) {
             byte b = var4[var6];
             String hexstring = Integer.toHexString(255 & b);
             if (hexstring.length() < 2) {
@@ -58,7 +61,7 @@ public class MD5Util {
                 }
 
                 pos += 4;
-            } while(pos < voucher.length());
+            } while (pos < voucher.length());
 
             return sBuilder.toString();
         } else {

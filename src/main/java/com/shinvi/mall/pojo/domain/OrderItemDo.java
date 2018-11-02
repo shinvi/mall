@@ -22,11 +22,7 @@ public class OrderItemDo {
 
     private BigDecimal totalPrice;
 
-    private Date createTime;
-
-    private Date updateTime;
-
-    public OrderItemDo(Integer id, Integer userId, Long orderNo, Integer productId, String productName, String productMainImage, BigDecimal currentUnitPrice, Integer quantity, BigDecimal totalPrice, Date createTime, Date updateTime) {
+    public OrderItemDo(Integer id, Integer userId, Long orderNo, Integer productId, String productName, String productMainImage, BigDecimal currentUnitPrice, Integer quantity, BigDecimal totalPrice) {
         this.id = id;
         this.userId = userId;
         this.orderNo = orderNo;
@@ -36,8 +32,6 @@ public class OrderItemDo {
         this.currentUnitPrice = currentUnitPrice;
         this.quantity = quantity;
         this.totalPrice = totalPrice;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public OrderItemDo() {
@@ -114,21 +108,5 @@ public class OrderItemDo {
 
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

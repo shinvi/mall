@@ -24,11 +24,7 @@ public class ProductDo {
 
     private Integer status;
 
-    private Date createTime;
-
-    private Date updateTime;
-
-    public ProductDo(Integer id, Integer categoryId, String name, String subtitle, String mainImage, String subImages, String detail, BigDecimal price, Integer stock, Integer status, Date createTime, Date updateTime) {
+    public ProductDo(Integer id, Integer categoryId, String name, String subtitle, String mainImage, String subImages, String detail, BigDecimal price, Integer stock, Integer status) {
         this.id = id;
         this.categoryId = categoryId;
         this.name = name;
@@ -39,8 +35,6 @@ public class ProductDo {
         this.price = price;
         this.stock = stock;
         this.status = status;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public ProductDo() {
@@ -125,21 +119,5 @@ public class ProductDo {
 
     public void setStatus(Integer status) {
         this.status = status;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

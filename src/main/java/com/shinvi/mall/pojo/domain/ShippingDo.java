@@ -23,11 +23,7 @@ public class ShippingDo {
 
     private String receiverZip;
 
-    private Date createTime;
-
-    private Date updateTime;
-
-    public ShippingDo(Integer id, Integer userId, String receiverName, String receiverPhone, String receiverMobile, String receiverProvince, String receiverCity, String receiverDistrict, String receiverAddress, String receiverZip, Date createTime, Date updateTime) {
+    public ShippingDo(Integer id, Integer userId, String receiverName, String receiverPhone, String receiverMobile, String receiverProvince, String receiverCity, String receiverDistrict, String receiverAddress, String receiverZip) {
         this.id = id;
         this.userId = userId;
         this.receiverName = receiverName;
@@ -38,8 +34,6 @@ public class ShippingDo {
         this.receiverDistrict = receiverDistrict;
         this.receiverAddress = receiverAddress;
         this.receiverZip = receiverZip;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public ShippingDo() {
@@ -124,21 +118,5 @@ public class ShippingDo {
 
     public void setReceiverZip(String receiverZip) {
         this.receiverZip = receiverZip == null ? null : receiverZip.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

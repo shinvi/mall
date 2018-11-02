@@ -1,6 +1,5 @@
 package com.shinvi.mall.pojo.domain;
 
-import java.util.Date;
 
 public class PayInfoDo {
     private Integer id;
@@ -15,19 +14,13 @@ public class PayInfoDo {
 
     private String platformStatus;
 
-    private Date createTime;
-
-    private Date updateTime;
-
-    public PayInfoDo(Integer id, Integer userId, Long orderNo, Integer payPlatform, String platformNumber, String platformStatus, Date createTime, Date updateTime) {
+    public PayInfoDo(Integer id, Integer userId, Long orderNo, Integer payPlatform, String platformNumber, String platformStatus) {
         this.id = id;
         this.userId = userId;
         this.orderNo = orderNo;
         this.payPlatform = payPlatform;
         this.platformNumber = platformNumber;
         this.platformStatus = platformStatus;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public PayInfoDo() {
@@ -80,21 +73,5 @@ public class PayInfoDo {
 
     public void setPlatformStatus(String platformStatus) {
         this.platformStatus = platformStatus == null ? null : platformStatus.trim();
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

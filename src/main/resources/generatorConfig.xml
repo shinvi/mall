@@ -36,16 +36,17 @@
             <property name="enableSubPackages" value="false"/>
         </javaClientGenerator>
 
-        <table tableName="mmall_cart" domainObjectName="CartDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
-        <table tableName="mmall_category" domainObjectName="CategoryDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
-        <table tableName="mmall_order" domainObjectName="OrderDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
-        <table tableName="mmall_order_item" domainObjectName="OrderItemDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
-        <table tableName="mmall_pay_info" domainObjectName="PayInfoDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
-        <table tableName="mmall_product" domainObjectName="ProductDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false">
-            <columnOverride column="detail" jdbcType="VARCHAR" />
-            <columnOverride column="sub_images" jdbcType="VARCHAR"/>
-        </table>
-        <table tableName="mmall_shipping" domainObjectName="ShippingDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
-        <table tableName="mmall_user" domainObjectName="UserDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>
+        <!--<table tableName="mmall_cart" domainObjectName="CartDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>-->
+        <!--<table tableName="mmall_category" domainObjectName="CategoryDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>-->
+        <!--<table tableName="mmall_order" domainObjectName="OrderDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>-->
+        <!--<table tableName="mmall_order_item" domainObjectName="OrderItemDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>-->
+        <!--<table tableName="mmall_pay_info" domainObjectName="PayInfoDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>-->
+        <!--<table tableName="mmall_product" domainObjectName="ProductDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false">-->
+            <!--<columnOverride column="detail" jdbcType="VARCHAR" />-->
+            <!--<columnOverride column="sub_images" jdbcType="VARCHAR"/>-->
+        <!--</table>-->
+        <!--<table tableName="mmall_shipping" domainObjectName="ShippingDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>-->
+        <!--<table tableName="mmall_user" domainObjectName="UserDo" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" enableUpdateByExample="false" selectByExampleQueryId="false"/>-->
+        <table tableName="mmall_user_token" domainObjectName="UserTokenDo" selectByExampleQueryId="false" enableUpdateByExample="false" enableSelectByExample="false" enableDeleteByExample="false" enableCountByExample="false"/>
     </context>
 </generatorConfiguration>

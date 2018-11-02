@@ -1,5 +1,7 @@
 package com.shinvi.mall.pojo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 
 public class UserDo {
@@ -7,6 +9,7 @@ public class UserDo {
 
     private String username;
 
+    @JsonIgnore
     private String password;
 
     private String email;
@@ -19,11 +22,7 @@ public class UserDo {
 
     private Integer role;
 
-    private Date createTime;
-
-    private Date updateTime;
-
-    public UserDo(Integer id, String username, String password, String email, String phone, String pwQuestion, String pwAnswer, Integer role, Date createTime, Date updateTime) {
+    public UserDo(Integer id, String username, String password, String email, String phone, String pwQuestion, String pwAnswer, Integer role) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -32,8 +31,6 @@ public class UserDo {
         this.pwQuestion = pwQuestion;
         this.pwAnswer = pwAnswer;
         this.role = role;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public UserDo() {
@@ -104,19 +101,4 @@ public class UserDo {
         this.role = role;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
 }

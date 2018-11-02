@@ -28,11 +28,7 @@ public class OrderDo {
 
     private Date closeTime;
 
-    private Date createTime;
-
-    private Date updateTime;
-
-    public OrderDo(Integer id, Long orderNo, Integer userId, Integer shippingId, BigDecimal payment, Integer paymentType, Integer postage, Integer status, Date paymentTime, Date sendTime, Date endTime, Date closeTime, Date createTime, Date updateTime) {
+    public OrderDo(Integer id, Long orderNo, Integer userId, Integer shippingId, BigDecimal payment, Integer paymentType, Integer postage, Integer status, Date paymentTime, Date sendTime, Date endTime, Date closeTime) {
         this.id = id;
         this.orderNo = orderNo;
         this.userId = userId;
@@ -45,8 +41,6 @@ public class OrderDo {
         this.sendTime = sendTime;
         this.endTime = endTime;
         this.closeTime = closeTime;
-        this.createTime = createTime;
-        this.updateTime = updateTime;
     }
 
     public OrderDo() {
@@ -147,21 +141,5 @@ public class OrderDo {
 
     public void setCloseTime(Date closeTime) {
         this.closeTime = closeTime;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
     }
 }

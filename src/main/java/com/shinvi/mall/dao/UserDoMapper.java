@@ -19,5 +19,7 @@ public interface UserDoMapper {
 
     int countEmail(String email);
 
-    UserDo selectLogin(String username,String password);
+    UserDo selectLogin(String username, String password);
+
+    UserDo selectByToken(String token);
 }

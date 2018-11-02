@@ -11,13 +11,13 @@
             <arg column="pw_question" javaType="java.lang.String" jdbcType="VARCHAR"/>
             <arg column="pw_answer" javaType="java.lang.String" jdbcType="VARCHAR"/>
             <arg column="role" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
-            <arg column="update_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-        id, username, password, email, phone, pw_question, pw_answer, role, create_time,
-        update_time
+        id, username, password, email, phone, pw_question, pw_answer, role
+    </sql>
+    <sql id="Base_User_Column_List">
+        u.id, u.username, u.password, u.email, u.phone, u.pw_question, u.pw_answer, u.role
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -79,12 +79,8 @@
             <if test="role != null">
                 role,
             </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
+            create_time,
+            update_time,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -111,12 +107,8 @@
             <if test="role != null">
                 #{role,jdbcType=INTEGER},
             </if>
-            <if test="createTime != null">
-                now(),
-            </if>
-            <if test="updateTime != null">
-                now(),
-            </if>
+            now(),
+            now(),
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="com.shinvi.mall.pojo.domain.UserDo">
@@ -143,12 +135,7 @@
             <if test="role != null">
                 role = #{role,jdbcType=INTEGER},
             </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-            <if test="updateTime != null">
-                update_time = now(),
-            </if>
+            update_time = now(),
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -161,7 +148,6 @@
             pw_question = #{pwQuestion,jdbcType=VARCHAR},
             pw_answer   = #{pwAnswer,jdbcType=VARCHAR},
             role        = #{role,jdbcType=INTEGER},
-            create_time = #{createTime,jdbcType=TIMESTAMP},
             update_time = now()
         where id = #{id,jdbcType=INTEGER}
     </update>
@@ -181,7 +167,21 @@
         select
         <include refid="Base_Column_List"/>
         from mmall_user
-        where username = #{username}
-        and password = #{password}
+        where username = #{arg0}
+        and password = #{arg1}
+    </select>
+
+    <select id="selectByToken" resultMap="BaseResultMap" parameterType="string">
+        select
+        <include refid="Base_User_Column_List"/>
+        from mmall_user u
+        join
+        mmall_user_token t
+        on
+        u.id = t.user_id
+        where
+        t.token = #{token}
+        and
+        t.expire_time > now()
     </select>
 </mapper>
