@@ -1,0 +1,218 @@
+{
+	"info": {
+		"_postman_id": "847bafa8-5410-436d-aeb1-7aa4384fc7d6",
+		"name": "mall",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "普通用户登录",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/user/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "回答问题找回密码",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "accept",
+								"value": "11111111111",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "username",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "oldPassword",
+									"value": "123456",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "newPassword",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "answer",
+									"value": "邱少云",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/user/admin/password",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"admin",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "登出",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/user/logout",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取个人信息",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/user/",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "后台登录",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/backend/user/login",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"backend",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
