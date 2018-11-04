@@ -16,8 +16,9 @@ public class UserDo {
 
     private String phone;
 
+    @JsonIgnore
     private String pwQuestion;
-
+    @JsonIgnore
     private String pwAnswer;
 
     private Integer role;

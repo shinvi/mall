@@ -18,4 +18,6 @@ public interface UserTokenDoMapper {
     UserTokenDo selectByToken(String token);
 
     UserTokenDo selectByUserId(Integer userId);
+
+    Integer selectUserIdByToken(String token);
 }

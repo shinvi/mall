@@ -19,7 +19,15 @@ public interface UserDoMapper {
 
     int countEmail(String email);
 
+    int countEmailWithoutPrimaryKey(Integer id);
+
     UserDo selectLogin(String username, String password);
 
     UserDo selectByToken(String token);
+
+    String selectQuestionByUsername(String username);
+
+    int updatePasswordByQuestion(String username, String answer, String newPassword);
+
+    int updatePasswordByOldPassword(Integer id, String oldPassword, String newPassword);
 }

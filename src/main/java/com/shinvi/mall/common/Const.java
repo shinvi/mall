@@ -2,13 +2,13 @@ package com.shinvi.mall.common;
 
 public interface Const {
     interface User {
-        String TOKEN = "token";
+        String USER_TOKEN = "user_token";
 
-        String CURRENT_USER = "current_user";
+        String EMAIL = "email";
 
-        String PROPERTY_EMAIL = "email";
+        String USERNAME = "username";
 
-        String PROPERTY_USERNAME = "username";
+        String USER_ID = "userId";
     }
 
     interface Role {

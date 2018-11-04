@@ -16,7 +16,7 @@ public class ControllerExceptionAdvice {
         if (e instanceof ServerResponseException) {
             return ServerResponse.error(((ServerResponseException) e).getResponseCode());
         } else {
-            return ServerResponse.error(StringUtils.isBlank(e.getMessage()) ? "请求失败" : e.getMessage());
+            return ServerResponse.exception(e);
         }
     }
 }

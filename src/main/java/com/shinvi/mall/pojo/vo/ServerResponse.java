@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class ServerResponse<T> implements Serializable {
     public int status;
     private String msg;
+    private Exception exception;
     private T data;
 
     public int getStatus() {
@@ -31,6 +32,14 @@ public class ServerResponse<T> implements Serializable {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public Exception getException() {
+        return exception;
+    }
+
+    public void setException(Exception exception) {
+        this.exception = exception;
     }
 
     public static <T> ServerResponse<T> success(T data) {
@@ -59,6 +68,14 @@ public class ServerResponse<T> implements Serializable {
         ServerResponse<T> response = new ServerResponse<>();
         response.setStatus(ResponseCode.ERROR.getCode());
         response.setMsg(msg);
+        return response;
+    }
+
+    public static <T> ServerResponse<T> exception(Exception e) {
+        ServerResponse<T> response = new ServerResponse<>();
+        response.setStatus(ResponseCode.SERVER_ERROR.getCode());
+        response.setMsg(ResponseCode.SERVER_ERROR.getDesc());
+        response.setException(e);
         return response;
     }
 }

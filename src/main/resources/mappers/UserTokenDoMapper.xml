@@ -105,4 +105,9 @@
         from mmall_user_token
         where user_id = #{userId}
     </select>
+    <select id="selectUserIdByToken" parameterType="string" resultType="integer">
+        select user_id
+        from mmall_user_token
+        where token = #{token}
+    </select>
 </mapper>
