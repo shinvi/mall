@@ -2,7 +2,6 @@ package com.shinvi.mall.pojo.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.util.Date;
 
 public class UserDo {
     private Integer id;

@@ -1,14 +1,15 @@
-package com.shinvi.mall.service.portal.impl;
+package com.shinvi.mall.service.impl;
 
 import com.shinvi.mall.base.aop.annotation.Transactional;
 import com.shinvi.mall.base.exception.ServerResponseException;
+import com.shinvi.mall.base.service.BaseService;
 import com.shinvi.mall.common.Const;
 import com.shinvi.mall.dao.UserDoMapper;
 import com.shinvi.mall.dao.UserTokenDoMapper;
 import com.shinvi.mall.pojo.domain.UserDo;
 import com.shinvi.mall.pojo.domain.UserTokenDo;
 import com.shinvi.mall.pojo.vo.UserVo;
-import com.shinvi.mall.service.portal.IUserService;
+import com.shinvi.mall.service.IUserService;
 import com.shinvi.mall.util.MD5Util;
 import com.shinvi.mall.util.PasswordUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,9 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Map;
 
 @Service
-public class UserService implements IUserService {
+public class UserService extends BaseService implements IUserService {
 
     @Autowired
     private UserDoMapper userDoMapper;
@@ -66,8 +68,7 @@ public class UserService implements IUserService {
         validPropertyExist(Const.User.USERNAME, user.getUsername(), true);
         validPropertyExist(Const.User.EMAIL, user.getEmail(), true);
         user.setPassword(PasswordUtils.md5UserPassword(user.getPassword()));
-        int resultCount = userDoMapper.insert(user);
-        if (resultCount == 0) {
+        if (userDoMapper.insert(user) <= 0) {
             throw new ServerResponseException("注册失败");
         }
         return user;
@@ -81,6 +82,11 @@ public class UserService implements IUserService {
     @Override
     public Integer getUserIdByToken(String token) {
         return userTokenDoMapper.selectUserIdByToken(token);
+    }
+
+    @Override
+    public UserDo getUserIdNRoleByToken(String token) {
+        return userDoMapper.selectUserIdNRoleByToken(token);
     }
 
     @Override
@@ -116,7 +122,7 @@ public class UserService implements IUserService {
     @Transactional
     @Override
     public UserDo updateUserBySelf(UserDo user) {
-        int emailCount = userDoMapper.countEmailWithoutPrimaryKey(user.getId());
+        int emailCount = userDoMapper.countEmailWithoutPrimaryKey(user.getEmail(), user.getId());
         if (emailCount > 0) {
             throw new ServerResponseException("邮箱已存在");
         }
@@ -130,30 +136,9 @@ public class UserService implements IUserService {
         return userDoMapper.selectByPrimaryKey(user.getId());
     }
 
-    /**
-     * 效验UserDo中某个属性的值是否存在于数据库表中
-     *
-     * @param property 属性名
-     * @param content  值
-     * @param exist    true代表效验已存在,false代表效验不存在
-     */
-    private void validPropertyExist(String property, String content, boolean exist) {
-        int count;
-        String message;
-        switch (property) {
-            case Const.User.EMAIL:
-                count = userDoMapper.countEmail(content);
-                message = exist ? "邮箱已存在" : "邮箱不存在";
-                break;
-            case Const.User.USERNAME:
-                count = userDoMapper.countUsername(content);
-                message = exist ? "用户名已存在" : "用户名不存在";
-                break;
-            default:
-                return;
-        }
-        if (exist && count > 0 || !exist && count == 0) {
-            throw new ServerResponseException(message);
-        }
+    @Override
+    protected void registerPropertyValidator(Map<String, PropertyValidator> validators) {
+        validators.put(Const.User.EMAIL, new PropertyValidator(s -> userDoMapper.countEmail(s), "邮箱已存在", "邮箱不存在"));
+        validators.put(Const.User.USERNAME, new PropertyValidator(s -> userDoMapper.countUsername(s), "用户名已存在", "用户名不存在"));
     }
 }

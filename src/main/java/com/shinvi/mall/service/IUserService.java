@@ -1,4 +1,4 @@
-package com.shinvi.mall.service.portal;
+package com.shinvi.mall.service;
 
 
 import com.shinvi.mall.pojo.domain.UserDo;
@@ -21,6 +21,8 @@ public interface IUserService {
     UserDo getUserById(Integer id);
 
     Integer getUserIdByToken(String token);
+
+    UserDo getUserIdNRoleByToken(String token);
 
     String getUserQuestionByUsername(String username);
 

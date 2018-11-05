@@ -1,6 +1,9 @@
 package com.shinvi.mall.common;
 
 public interface Const {
+
+    String ID = "id";
+
     interface User {
         String USER_TOKEN = "user_token";
 
@@ -20,5 +23,9 @@ public interface Const {
          * 普通用户
          */
         int ROLE_CUSTOMER = 1;
+    }
+
+    interface Category {
+        String NAME = "name";
     }
 }

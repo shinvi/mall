@@ -52,5 +52,6 @@
 
     <mvc:interceptors>
         <ref bean="userTokenInterceptor"/>
+        <ref bean="adminTokenInterceptor"/>
     </mvc:interceptors>
 </beans>

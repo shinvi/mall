@@ -8,6 +8,7 @@ public enum ResponseCode {
     ERROR(1, "未知错误"),
     SERVER_ERROR(5, "请求出错"),
     NEED_LOGIN(10, "您的登录已过期，请重新登录"),
+    PERMISSION_ERROR(6, "您暂无此项操作的权限"),
     ILLEGAL_ARGUMENT(2, "非法的请求参数");
 
     private final int code;

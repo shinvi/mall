@@ -5,16 +5,14 @@ import com.shinvi.mall.common.Const;
 import com.shinvi.mall.pojo.domain.UserDo;
 import com.shinvi.mall.pojo.vo.ServerResponse;
 import com.shinvi.mall.pojo.vo.UserVo;
-import com.shinvi.mall.service.portal.IUserService;
+import com.shinvi.mall.service.IUserService;
 import com.shinvi.mall.util.ObjectUtils;
-import org.apache.commons.collections4.Put;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author 邱长海
@@ -74,13 +72,13 @@ public class UserController {
         return ServerResponse.success(new UserVo(user));
     }
 
-    @RequestMapping(value = "/{" + Const.User.USERNAME + "}/question", method = RequestMethod.GET)
-    public ServerResponse<String> getUserQuestion(@PathVariable(Const.User.USERNAME) String username) {
+    @RequestMapping(value = "/question", method = RequestMethod.GET)
+    public ServerResponse<String> getUserQuestion(String username) {
         return ServerResponse.success(userService.getUserQuestionByUsername(username));
     }
 
-    @RequestMapping(value = "/{" + Const.User.USERNAME + "}/password", method = RequestMethod.PUT)
-    public ServerResponse restPassword(@PathVariable(Const.User.USERNAME) String username, String answer, String newPassword) {
+    @RequestMapping(value = "/question/password", method = RequestMethod.PUT)
+    public ServerResponse restPasswordByQuestion(String username, String answer, String newPassword) {
         if (StringUtils.isBlank(newPassword)) {
             return ServerResponse.error("新密码不能为空");
         }
@@ -90,7 +88,7 @@ public class UserController {
 
     @ValidToken
     @RequestMapping(value = "/password", method = RequestMethod.PUT)
-    public ServerResponse resetPassword(@RequestAttribute(Const.User.USER_ID) Integer userId, String oldPassword,
+    public ServerResponse resetPasswordByOldPassword(@RequestAttribute(Const.User.USER_ID) Integer userId, String oldPassword,
                                         String newPassword) {
         if (StringUtils.isBlank(newPassword)) {
             return ServerResponse.error("新密码不能为空");

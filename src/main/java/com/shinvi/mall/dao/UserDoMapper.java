@@ -19,11 +19,13 @@ public interface UserDoMapper {
 
     int countEmail(String email);
 
-    int countEmailWithoutPrimaryKey(Integer id);
+    int countEmailWithoutPrimaryKey(String email, Integer id);
 
     UserDo selectLogin(String username, String password);
 
     UserDo selectByToken(String token);
+
+    UserDo selectUserIdNRoleByToken(String token);
 
     String selectQuestionByUsername(String username);
 
