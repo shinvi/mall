@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "847bafa8-5410-436d-aeb1-7aa4384fc7d6",
+		"_postman_id": "5a414f34-788c-4858-9d1b-0e57a5f142ef",
 		"name": "mall",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -76,9 +76,8 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "",
-									"type": "text",
-									"disabled": true
+									"value": "admin",
+									"type": "text"
 								},
 								{
 									"key": "oldPassword",
@@ -93,20 +92,20 @@
 								},
 								{
 									"key": "answer",
-									"value": "邱少云",
+									"value": "王力宏",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/user/admin/password",
+							"raw": "localhost:8080/user/question/password",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"user",
-								"admin",
+								"question",
 								"password"
 							]
 						}
@@ -198,15 +197,383 @@
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/backend/user/login",
+							"raw": "localhost:8080/manage/user/login",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"backend",
+								"manage",
 								"user",
 								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户注册",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "御坂美琴",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "bilibili",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "misaka@shinvi.com",
+									"type": "text"
+								},
+								{
+									"key": "phone",
+									"value": "166666666",
+									"type": "text"
+								},
+								{
+									"key": "pwQuestion",
+									"value": "我的初中是哪一所",
+									"type": "text"
+								},
+								{
+									"key": "pwAnswer",
+									"value": "常盘台",
+									"type": "text"
+								},
+								{
+									"key": "role",
+									"value": "0",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取用户密码问题",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/question?username=御坂美琴",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"question"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "御坂美琴"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改个人密码",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "newPassword",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "oldPassword",
+									"value": "123456",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改个人信息",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "misaka@shinvi.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "role",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manage/category",
+			"item": [
+				{
+					"name": "创建分类",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "misaka@shinvi.com",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "会话",
+									"type": "text"
+								},
+								{
+									"key": "parentId",
+									"value": "100034",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/manage/category",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manage",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改分类",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "100034",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "首页",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/manage/category",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manage",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取子分类",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/manage/category?parentId=100035",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manage",
+								"category"
+							],
+							"query": [
+								{
+									"key": "parentId",
+									"value": "100035"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取分类及其递归子类",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/manage/category/100037",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manage",
+								"category",
+								"100037"
 							]
 						}
 					},

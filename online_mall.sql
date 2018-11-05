@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80011
 File Encoding         : 65001
 
-Date: 2018-11-02 18:17:16
+Date: 2018-11-05 17:55:46
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -42,17 +42,21 @@ DROP TABLE IF EXISTS `mmall_category`;
 CREATE TABLE `mmall_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '类别id',
   `parent_id` int(11) DEFAULT NULL COMMENT '父类别id,id=0时说明是根节点',
-  `name` varchar(50) DEFAULT NULL COMMENT '类别名称',
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '类别名称',
   `status` tinyint(1) DEFAULT '1' COMMENT '类别状态 1-正常,2-已废弃',
   `sort_order` int(4) DEFAULT NULL COMMENT '排序编号,同类展示顺序,数值相等则自然排序',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100032 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=100038 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mmall_category
 -- ----------------------------
+INSERT INTO `mmall_category` VALUES ('100034', '0', '首页', '1', null, '2018-11-05 16:19:37', '2018-11-05 16:33:03');
+INSERT INTO `mmall_category` VALUES ('100035', '100034', '统一', '1', null, '2018-11-05 17:09:36', '2018-11-05 17:09:36');
+INSERT INTO `mmall_category` VALUES ('100036', '0', '会话', '1', null, '2018-11-05 17:09:46', '2018-11-05 17:09:46');
+INSERT INTO `mmall_category` VALUES ('100037', '100035', '冰红茶', '1', null, '2018-11-05 17:35:16', '2018-11-05 17:35:16');
 
 -- ----------------------------
 -- Table structure for mmall_order
@@ -191,12 +195,13 @@ CREATE TABLE `mmall_user` (
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_name_unique` (`username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mmall_user
 -- ----------------------------
-INSERT INTO `mmall_user` VALUES ('2', 'admin', 'e10adc3949ba59abbe56e057f20f883e', 'admin@shinvi.com', null, null, null, '0', '2018-11-02 13:24:02', '2018-11-02 13:24:07');
+INSERT INTO `mmall_user` VALUES ('2', 'admin', 'f76de0d6d93cd5c9b1632041e6394c53', 'admin@shinvi.com', '133333333', '你是谁', '王力宏', '0', '2018-11-02 13:24:02', '2018-11-05 11:39:09');
+INSERT INTO `mmall_user` VALUES ('22', '御坂美琴', 'f46e11a57b012c3d17b2bd99f899d9ba', 'misaka@shinvi.com', '166666666', '我的初中是哪一所', '常盘台', '1', '2018-11-05 10:55:56', '2018-11-05 10:55:56');
 
 -- ----------------------------
 -- Table structure for mmall_user_token
@@ -217,4 +222,4 @@ CREATE TABLE `mmall_user_token` (
 -- ----------------------------
 -- Records of mmall_user_token
 -- ----------------------------
-INSERT INTO `mmall_user_token` VALUES ('24', '2', '2018-12-02 14:11:06', '2b51c627d7de2d565f2eaf193b213544', '2018-11-02 14:11:05', '2018-11-02 14:11:05');
+INSERT INTO `mmall_user_token` VALUES ('24', '2', '2018-12-05 15:29:54', '3f104dc58ac44835b049d15885e86b76', '2018-11-02 14:11:05', '2018-11-05 15:29:54');
