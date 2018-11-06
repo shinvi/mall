@@ -12,10 +12,10 @@ public class ControllerExceptionAdvice {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public ServerResponse handleException(Exception e) {
-        e.printStackTrace();
         if (e instanceof ServerResponseException) {
             return ServerResponse.error(((ServerResponseException) e).getResponseCode());
         } else {
+            e.printStackTrace();
             return ServerResponse.exception(e);
         }
     }

@@ -24,12 +24,12 @@
 							"formdata": [
 								{
 									"key": "username",
-									"value": "admin",
+									"value": "御坂美琴",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "123456",
+									"value": "111111",
 									"type": "text"
 								}
 							]
@@ -76,7 +76,7 @@
 							"urlencoded": [
 								{
 									"key": "username",
-									"value": "admin",
+									"value": "御坂美琴",
 									"type": "text"
 								},
 								{
@@ -87,12 +87,12 @@
 								},
 								{
 									"key": "newPassword",
-									"value": "123456",
+									"value": "111111",
 									"type": "text"
 								},
 								{
 									"key": "answer",
-									"value": "王力宏",
+									"value": "常盘台",
 									"type": "text"
 								}
 							]
@@ -574,6 +574,193 @@
 								"manage",
 								"category",
 								"100037"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manage/product",
+			"item": [
+				{
+					"name": "添加商品",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "categoryId",
+									"value": "100035",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "小萌希奥纸尿裤",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "207.65",
+									"type": "text"
+								},
+								{
+									"key": "stock",
+									"value": "103",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "27",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "subImages",
+									"value": "333.jpg",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/manage/product",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manage",
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改商品",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/manage/product?id=27",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manage",
+								"product"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "27"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取商品详情",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/manage/product/27",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manage",
+								"product",
+								"27"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取所有商品(带分页)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/manage/product?page=1&pageSize=10",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manage",
+								"product"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								},
+								{
+									"key": "name",
+									"value": "米",
+									"disabled": true
+								}
 							]
 						}
 					},

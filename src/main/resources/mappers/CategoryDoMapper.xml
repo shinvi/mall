@@ -113,6 +113,13 @@
         where id = #{id}
     </select>
 
+    <select id="countPrimaryKeyNNotTop" parameterType="integer" resultType="int">
+        select count(1)
+        from mmall_category
+        where id = #{id}
+          and parent_id != 0
+    </select>
+
     <select id="countName" parameterType="string" resultType="int">
         select count(1)
         from mmall_category

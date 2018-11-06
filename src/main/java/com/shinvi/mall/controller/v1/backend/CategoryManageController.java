@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/manage/category", headers = "version=1.0")
-public class CategoryController {
+public class CategoryManageController {
 
     @Autowired
     private ICategoryService categoryService;

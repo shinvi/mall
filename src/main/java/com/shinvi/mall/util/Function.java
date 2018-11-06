@@ -5,5 +5,5 @@ package com.shinvi.mall.util;
  */
 @FunctionalInterface
 public interface Function<E> {
-    void invoke(E e) throws Exception;
+    void invoke(E e);
 }

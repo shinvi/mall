@@ -19,6 +19,8 @@ public interface CategoryDoMapper {
 
     int countPrimaryKey(Integer id);
 
+    int countPrimaryKeyNNotTop(Integer id);
+
     int countName(String name);
 
     List<CategoryDo> selectByParentId(Integer parentId);

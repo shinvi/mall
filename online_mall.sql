@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80011
 File Encoding         : 65001
 
-Date: 2018-11-05 17:55:46
+Date: 2018-11-06 17:32:47
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -53,10 +53,10 @@ CREATE TABLE `mmall_category` (
 -- ----------------------------
 -- Records of mmall_category
 -- ----------------------------
-INSERT INTO `mmall_category` VALUES ('100034', '0', '首页', '1', null, '2018-11-05 16:19:37', '2018-11-05 16:33:03');
-INSERT INTO `mmall_category` VALUES ('100035', '100034', '统一', '1', null, '2018-11-05 17:09:36', '2018-11-05 17:09:36');
-INSERT INTO `mmall_category` VALUES ('100036', '0', '会话', '1', null, '2018-11-05 17:09:46', '2018-11-05 17:09:46');
-INSERT INTO `mmall_category` VALUES ('100037', '100035', '冰红茶', '1', null, '2018-11-05 17:35:16', '2018-11-05 17:35:16');
+INSERT INTO `mmall_category` VALUES ('100034', '0', '生活类', '1', null, '2018-11-05 16:19:37', '2018-11-05 16:33:03');
+INSERT INTO `mmall_category` VALUES ('100035', '100034', '母婴用品', '1', null, '2018-11-05 17:09:36', '2018-11-05 17:09:36');
+INSERT INTO `mmall_category` VALUES ('100036', '0', '电子数码类', '1', null, '2018-11-05 17:09:46', '2018-11-05 17:09:46');
+INSERT INTO `mmall_category` VALUES ('100037', '100035', '手机', '1', null, '2018-11-05 17:35:16', '2018-11-05 17:35:16');
 
 -- ----------------------------
 -- Table structure for mmall_order
@@ -148,11 +148,14 @@ CREATE TABLE `mmall_product` (
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mmall_product
 -- ----------------------------
+INSERT INTO `mmall_product` VALUES ('27', '100035', '小萌希奥纸尿裤', null, '333.jpg', '333.jpg', null, '198.64', '103', '1', '2018-11-06 10:51:59', '2018-11-06 14:08:13');
+INSERT INTO `mmall_product` VALUES ('28', '100036', '小米mix3', '小米手机', '11.jpg', '11.jpg,22.jpg', null, '3999.99', '2', '1', '2018-11-06 14:51:12', '2018-11-06 14:51:15');
+INSERT INTO `mmall_product` VALUES ('29', '10036', 'apple iphoneX', '苹果手机', null, null, null, '8999.00', '0', '3', '2018-11-06 15:14:30', '2018-11-06 15:14:33');
 
 -- ----------------------------
 -- Table structure for mmall_shipping
@@ -201,7 +204,7 @@ CREATE TABLE `mmall_user` (
 -- Records of mmall_user
 -- ----------------------------
 INSERT INTO `mmall_user` VALUES ('2', 'admin', 'f76de0d6d93cd5c9b1632041e6394c53', 'admin@shinvi.com', '133333333', '你是谁', '王力宏', '0', '2018-11-02 13:24:02', '2018-11-05 11:39:09');
-INSERT INTO `mmall_user` VALUES ('22', '御坂美琴', 'f46e11a57b012c3d17b2bd99f899d9ba', 'misaka@shinvi.com', '166666666', '我的初中是哪一所', '常盘台', '1', '2018-11-05 10:55:56', '2018-11-05 10:55:56');
+INSERT INTO `mmall_user` VALUES ('22', '御坂美琴', '2ce89db8967fa0ff861b130d1df57223', 'misaka@shinvi.com', '166666666', '我的初中是哪一所', '常盘台', '1', '2018-11-05 10:55:56', '2018-11-06 14:13:13');
 
 -- ----------------------------
 -- Table structure for mmall_user_token
@@ -217,9 +220,10 @@ CREATE TABLE `mmall_user_token` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_token` (`token`) USING BTREE,
   UNIQUE KEY `uk_user_id` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mmall_user_token
 -- ----------------------------
-INSERT INTO `mmall_user_token` VALUES ('24', '2', '2018-12-05 15:29:54', '3f104dc58ac44835b049d15885e86b76', '2018-11-02 14:11:05', '2018-11-05 15:29:54');
+INSERT INTO `mmall_user_token` VALUES ('24', '2', '2018-12-06 14:13:49', '4482cef0ceec0ee1a07663a5c3a7bf34', '2018-11-02 14:11:05', '2018-11-06 14:13:49');
+INSERT INTO `mmall_user_token` VALUES ('25', '22', '2018-12-06 14:13:22', 'e7d5224c5007d8d635cbc69b89f131e8', '2018-11-06 14:13:22', '2018-11-06 14:13:22');

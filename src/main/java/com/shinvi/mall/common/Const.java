@@ -28,4 +28,12 @@ public interface Const {
     interface Category {
         String NAME = "name";
     }
+
+    interface Product {
+        String CATEGORY_ID = "categoryId";
+
+        int STATUS_IN_STOCK = 1;
+        int STATUS_OUT_STOCK = 2;
+        int STATUS_DELETE = 3;
+    }
 }
