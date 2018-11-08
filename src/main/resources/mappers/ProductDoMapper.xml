@@ -25,6 +25,14 @@
         where id = #{id,jdbcType=INTEGER}
         and status != 3
     </select>
+
+    <select id="selectOnlineByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_product
+        where id = #{id,jdbcType=INTEGER}
+        and status = 1
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         update mmall_product
         set status      = 3,
@@ -198,5 +206,18 @@
             and status != 3
         </where>
         order by id asc
+    </select>
+    <select id="selectOnlineAllByKeywordNCategoryIds" resultMap="BaseResultMap" parameterType="map">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_product
+        <where>
+            <if test="keyword !=null">
+
+            </if>
+            <if test="categoryIds !=null">
+
+            </if>
+        </where>
     </select>
 </mapper>

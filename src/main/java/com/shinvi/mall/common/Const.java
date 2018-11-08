@@ -4,6 +4,14 @@ public interface Const {
 
     String ID = "id";
 
+    interface OrderBy {
+        String DESC = "desc";
+        String ASC = "asc";
+
+        String PRICE_DESC = "price_desc";
+        String PRICE_ASC = "price_asc";
+    }
+
     interface User {
         String USER_TOKEN = "user_token";
 
@@ -31,6 +39,8 @@ public interface Const {
 
     interface Product {
         String CATEGORY_ID = "categoryId";
+
+        String PRICE = "price";
 
         int STATUS_IN_STOCK = 1;
         int STATUS_OUT_STOCK = 2;

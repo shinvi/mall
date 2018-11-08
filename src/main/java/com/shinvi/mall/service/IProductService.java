@@ -14,5 +14,9 @@ public interface IProductService {
 
     ProductDo getProductById(Integer id);
 
+    ProductDo getOnlineProductById(Integer id);
+
     PageInfo<ProductDo> getProducts(int page, int pageSize, String name);
+
+    PageInfo<ProductDo> getOnlineProducts(int page, int pageSize, String keyword, Integer categoryId, String order);
 }

@@ -2,6 +2,7 @@ package com.shinvi.mall.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.shinvi.mall.base.aop.annotation.Transactional;
 import com.shinvi.mall.base.exception.ServerResponseException;
 import com.shinvi.mall.base.service.BaseService;
@@ -9,6 +10,8 @@ import com.shinvi.mall.common.Const;
 import com.shinvi.mall.dao.CategoryDoMapper;
 import com.shinvi.mall.dao.ProductDoMapper;
 import com.shinvi.mall.pojo.domain.ProductDo;
+import com.shinvi.mall.pojo.vo.CategoryVo;
+import com.shinvi.mall.service.ICategoryService;
 import com.shinvi.mall.service.IProductService;
 import com.shinvi.mall.util.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,6 +32,9 @@ public class ProductService extends BaseService implements IProductService {
 
     @Autowired
     private CategoryDoMapper categoryDoMapper;
+
+    @Autowired
+    private ICategoryService categoryService;
 
     @Transactional
     @Override
@@ -80,6 +86,15 @@ public class ProductService extends BaseService implements IProductService {
     }
 
     @Override
+    public ProductDo getOnlineProductById(Integer id) {
+        ProductDo product = productDoMapper.selectOnlineByPrimaryKey(id);
+        if (product == null) {
+            throw new ServerResponseException("该商品不存在或已下架");
+        }
+        return product;
+    }
+
+    @Override
     public PageInfo<ProductDo> getProducts(int page, int pageSize, String name) {
         PageHelper.startPage(page, pageSize);
         if (StringUtils.isNotBlank(name)) {
@@ -90,11 +105,47 @@ public class ProductService extends BaseService implements IProductService {
     }
 
     @Override
+    public PageInfo<ProductDo> getOnlineProducts(int page, int pageSize, String keyword, Integer categoryId, String order) {
+        PageHelper.startPage(page, pageSize);
+        List<Integer> categoryIds = null;
+        if (categoryId != null) {
+            CategoryVo category = categoryService.getCategoryWithChildrenById(categoryId);
+            categoryIds = gatherCategoryIds(category);
+        }
+        if (StringUtils.isBlank(keyword)) {
+            keyword = null;
+        } else {
+            keyword = "%" + keyword + "%";
+        }
+
+        if (StringUtils.isBlank(order)) {
+            order = null;
+        } else if (!ObjectUtils.in(order, Const.OrderBy.PRICE_DESC, Const.OrderBy.PRICE_ASC)) {
+            throw new ServerResponseException("排序参数非法");
+        } else {
+            String[] orderBy = order.split("_");
+            PageHelper.orderBy(orderBy[0] + " " + orderBy[1]);
+        }
+        return null;
+    }
+
+    @Override
     protected void registerPropertyValidator(Map<String, PropertyValidator> validators) {
         validators.put(Const.Product.CATEGORY_ID, new PropertyValidator(s -> categoryDoMapper.countPrimaryKeyNNotTop(Integer.valueOf(s)),
                 "商品类别已存在", "商品类别不存在"));
         validators.put(Const.ID, new PropertyValidator(s -> productDoMapper.countPrimaryKey(Integer.valueOf(s)),
                 "商品已存在", "商品不存在"));
+    }
+
+    private List<Integer> gatherCategoryIds(CategoryVo category) {
+        List<Integer> categoryIds = Lists.newArrayList();
+        categoryIds.add(category.getId());
+        if (category.getChildren() != null) {
+            for (CategoryVo child : category.getChildren()) {
+                categoryIds.addAll(gatherCategoryIds(child));
+            }
+        }
+        return categoryIds;
     }
 
     /**

@@ -14,6 +14,8 @@ public interface ProductDoMapper {
 
     ProductDo selectByPrimaryKey(Integer id);
 
+    ProductDo selectOnlineByPrimaryKey(Integer id);
+
     int updateByPrimaryKeySelective(ProductDo record);
 
     int updateByPrimaryKey(ProductDo record);
@@ -21,4 +23,6 @@ public interface ProductDoMapper {
     int countPrimaryKey(Integer id);
 
     List<ProductDo> selectAllByCondition(@Param("name") String name);
+
+    List<ProductDo> selectOnlineAllByKeywordNCategoryIds(@Param("keyword") String keyword, @Param("categoryIds") List<Integer> categoryIds);
 }

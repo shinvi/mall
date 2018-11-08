@@ -48,6 +48,9 @@ public class ProductManageController {
         return ServerResponse.success(productService.getProductById(id));
     }
 
+    /**
+     * @param name 搜索条件(商品名)
+     */
     @ValidAdmin
     @RequestMapping(method = RequestMethod.GET)
     public ServerResponse<PageInfo<ProductDo>> getProducts(@RequestParam(defaultValue = "1", required = false) int page,

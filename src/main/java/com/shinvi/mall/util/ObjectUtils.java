@@ -1,7 +1,10 @@
 package com.shinvi.mall.util;
 
 
+import com.google.common.collect.Sets;
+
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author 邱长海
@@ -25,12 +28,8 @@ public class ObjectUtils {
         if (other == null) {
             return false;
         }
-        for (Object o : other) {
-            if (Objects.equals(source, o)) {
-                return true;
-            }
-        }
-        return false;
+        Set<Object> others = Sets.newHashSet(other);
+        return others.contains(source);
     }
 
 }

@@ -3,8 +3,8 @@ package com.shinvi.mall.util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class MD5Util {
-    public MD5Util() {
+public class MD5Utils {
+    public MD5Utils() {
     }
 
     public static boolean isNotNull(String value) {

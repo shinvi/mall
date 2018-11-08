@@ -10,7 +10,7 @@ import com.shinvi.mall.pojo.domain.UserDo;
 import com.shinvi.mall.pojo.domain.UserTokenDo;
 import com.shinvi.mall.pojo.vo.UserVo;
 import com.shinvi.mall.service.IUserService;
-import com.shinvi.mall.util.MD5Util;
+import com.shinvi.mall.util.MD5Utils;
 import com.shinvi.mall.util.PasswordUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +51,7 @@ public class UserService extends BaseService implements IUserService {
         if (expired || single) {
             long exPireTime = System.currentTimeMillis() + (1000L * 60 * 60 * 24 * 30);
             userTokenDo.setExpireTime(new Date(exPireTime));
-            userTokenDo.setToken(MD5Util.getMD5(MD5Util.getMD5(userTokenDo.getUserId().toString()) + MD5Util.getMD5(String.valueOf(exPireTime))));
+            userTokenDo.setToken(MD5Utils.getMD5(MD5Utils.getMD5(userTokenDo.getUserId().toString()) + MD5Utils.getMD5(String.valueOf(exPireTime))));
             if (userTokenDo.getId() != null) {
                 userTokenDoMapper.updateByPrimaryKeySelective(userTokenDo);
             } else {
