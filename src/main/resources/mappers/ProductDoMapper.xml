@@ -195,7 +195,7 @@
           and status != 3
     </select>
 
-    <select id="selectAllByCondition" resultMap="BaseResultMap" parameterType="string">
+    <select id="selectAllByName" resultMap="BaseResultMap" parameterType="string">
         select
         <include refid="Base_Column_List"/>
         from mmall_product
@@ -207,17 +207,21 @@
         </where>
         order by id asc
     </select>
-    <select id="selectOnlineAllByKeywordNCategoryIds" resultMap="BaseResultMap" parameterType="map">
+    <select id="selectOnlineAllByNameNCategoryIds" resultMap="BaseResultMap" parameterType="map">
         select
         <include refid="Base_Column_List"/>
         from mmall_product
         <where>
-            <if test="keyword !=null">
-
+            <if test="name != null and name != ''">
+                and name like #{name}
             </if>
             <if test="categoryIds !=null">
-
+                and category_id in
+                <foreach collection="categoryIds" item="categoryId" open="(" separator="," close=")">
+                    #{categoryId}
+                </foreach>
             </if>
+            and status = 1
         </where>
     </select>
 </mapper>

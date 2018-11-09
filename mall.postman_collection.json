@@ -859,8 +859,51 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "获取已上架的商品列表",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8080/product?order=price_asc&categoryId=100036",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"product"
+							],
+							"query": [
+								{
+									"key": "order",
+									"value": "price_asc"
+								},
+								{
+									"key": "categoryId",
+									"value": "100036"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
+		},
+		{
+			"name": "cart",
+			"item": []
 		}
 	]
 }

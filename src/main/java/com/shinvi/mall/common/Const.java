@@ -3,6 +3,7 @@ package com.shinvi.mall.common;
 public interface Const {
 
     String ID = "id";
+    String UPDATE_TIME = "update_time";
 
     interface OrderBy {
         String DESC = "desc";

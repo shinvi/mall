@@ -22,7 +22,8 @@ public interface ProductDoMapper {
 
     int countPrimaryKey(Integer id);
 
-    List<ProductDo> selectAllByCondition(@Param("name") String name);
+    List<ProductDo> selectAllByName(@Param("name") String name);
 
-    List<ProductDo> selectOnlineAllByKeywordNCategoryIds(@Param("keyword") String keyword, @Param("categoryIds") List<Integer> categoryIds);
+    List<ProductDo> selectOnlineAllByNameNCategoryIds(@Param("name") String name, @Param("categoryIds") List<Integer> categoryIds);
+
 }

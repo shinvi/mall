@@ -100,33 +100,30 @@ public class ProductService extends BaseService implements IProductService {
         if (StringUtils.isNotBlank(name)) {
             name = "%" + name + "%";
         }
-        List<ProductDo> products = productDoMapper.selectAllByCondition(name);
-        return new PageInfo<>(products);
+        return new PageInfo<>(productDoMapper.selectAllByName(name));
     }
 
     @Override
-    public PageInfo<ProductDo> getOnlineProducts(int page, int pageSize, String keyword, Integer categoryId, String order) {
+    public PageInfo<ProductDo> getOnlineProducts(int page, int pageSize, String name, Integer categoryId, String order) {
         PageHelper.startPage(page, pageSize);
         List<Integer> categoryIds = null;
         if (categoryId != null) {
             CategoryVo category = categoryService.getCategoryWithChildrenById(categoryId);
             categoryIds = gatherCategoryIds(category);
         }
-        if (StringUtils.isBlank(keyword)) {
-            keyword = null;
+        if (StringUtils.isBlank(name)) {
+            name = null;
         } else {
-            keyword = "%" + keyword + "%";
+            name = "%" + name + "%";
         }
 
-        if (StringUtils.isBlank(order)) {
-            order = null;
-        } else if (!ObjectUtils.in(order, Const.OrderBy.PRICE_DESC, Const.OrderBy.PRICE_ASC)) {
+        if (!ObjectUtils.in(order, Const.OrderBy.PRICE_DESC, Const.OrderBy.PRICE_ASC)) {
             throw new ServerResponseException("排序参数非法");
         } else {
             String[] orderBy = order.split("_");
             PageHelper.orderBy(orderBy[0] + " " + orderBy[1]);
         }
-        return null;
+        return new PageInfo<>(productDoMapper.selectOnlineAllByNameNCategoryIds(name, categoryIds));
     }
 
     @Override

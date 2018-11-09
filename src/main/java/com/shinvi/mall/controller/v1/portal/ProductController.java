@@ -26,15 +26,17 @@ public class ProductController {
     }
 
     /**
-     * @param keyword 搜索条件
+     * @param name 搜索条件(商品名)
+     * @param categoryId 商品类别
+     * @param order 排序规则 {@link Const.OrderBy}
      */
     @RequestMapping(method = RequestMethod.GET)
     public ServerResponse<PageInfo<ProductDo>> getProducts(@RequestParam(defaultValue = "1", required = false) int page,
                                                            @RequestParam(defaultValue = "10", required = false) int pageSize,
-                                                           String keyword, Integer categoryId, String order) {
-        if (StringUtils.isBlank(keyword) && categoryId == null) {
+                                                           String name, Integer categoryId, String order) {
+        if (StringUtils.isBlank(name) && categoryId == null) {
             return ServerResponse.error(ResponseCode.ILLEGAL_ARGUMENT);
         }
-        return ServerResponse.success(productService.getOnlineProducts(page, pageSize, keyword, categoryId, order));
+        return ServerResponse.success(productService.getOnlineProducts(page, pageSize, name, categoryId, order));
     }
 }

@@ -27,12 +27,15 @@
     <insert id="insert" parameterType="com.shinvi.mall.pojo.domain.CartDo">
         insert into mmall_cart (id, user_id, product_id, quantity, checked, create_time, update_time)
         values (#{id,jdbcType=INTEGER},
-                #{userId,jdbcType=INTEGER},
-                #{productId,jdbcType=INTEGER},
-                #{quantity,jdbcType=INTEGER},
-                #{checked,jdbcType=INTEGER},
-                now(),
-                now())
+        #{userId,jdbcType=INTEGER},
+        #{productId,jdbcType=INTEGER},
+        #{quantity,jdbcType=INTEGER},
+        #{checked,jdbcType=INTEGER},
+        now(),
+        now())
+        <selectKey order="AFTER" keyProperty="id" resultType="int">
+            select last_insert_id()
+        </selectKey>
     </insert>
     <insert id="insertSelective" parameterType="com.shinvi.mall.pojo.domain.CartDo">
         insert into mmall_cart
@@ -103,4 +106,18 @@
             update_time = now()
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="selectByUserIdNProductId" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_cart
+        where user_id = #{userId}
+        and product_id = #{productId}
+    </select>
+
+    <select id="selectALLByUserId" parameterType="integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_cart where user_id = #{userId}
+    </select>
 </mapper>
