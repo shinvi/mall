@@ -10,7 +10,7 @@ import com.shinvi.mall.pojo.vo.CartProductVo;
  */
 public interface ICartService {
 
-    CartDo addCart(Integer userId, Integer count, Integer productId);
+    CartProductVo addCart(Integer userId, Integer count, Integer productId);
 
     PageInfo<CartProductVo> getCartsByUserId(int page, int pageSize, Integer userId);
 }

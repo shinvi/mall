@@ -10,19 +10,10 @@ import java.math.BigDecimal;
  * @author 邱长海
  */
 public class CartProductVo extends CartDo {
-    private BigDecimal totalPrice;
     private ProductDo product;
 
     public CartProductVo(CartDo cart) {
         BeanUtils.copyProperties(cart, this);
-    }
-
-    public BigDecimal getTotalPrice() {
-        return totalPrice;
-    }
-
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
     }
 
     public ProductDo getProduct() {

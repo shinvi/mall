@@ -2,6 +2,7 @@ package com.shinvi.mall.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.shinvi.mall.base.aop.annotation.Transactional;
 import com.shinvi.mall.base.exception.ServerResponseException;
 import com.shinvi.mall.common.Const;
@@ -31,10 +32,13 @@ public class CartService implements ICartService {
 
     @Transactional
     @Override
-    public CartDo addCart(Integer userId, Integer count, Integer productId) {
+    public CartProductVo addCart(Integer userId, Integer count, Integer productId) {
         ProductDo product = productDoMapper.selectByPrimaryKey(productId);
         if (product == null || product.getStatus() != Const.Product.STATUS_IN_STOCK) {
             throw new ServerResponseException("该商品不存在或已下架");
+        }
+        if (count > product.getStock()) {
+            throw new ServerResponseException("添加购物车失败, 商品库存不足");
         }
         CartDo cart = cartDoMapper.selectByUserIdNProductId(userId, productId);
         if (cart == null) {
@@ -44,6 +48,9 @@ public class CartService implements ICartService {
             cart.setQuantity(count);
         } else {
             cart.setQuantity(count + cart.getQuantity());
+        }
+        if (cart.getQuantity() > product.getStock()) {
+            throw new ServerResponseException("添加购物车失败, 商品库存不足");
         }
         int result;
         if (cart.getId() == null) {
@@ -56,7 +63,6 @@ public class CartService implements ICartService {
         }
         CartProductVo cartProduct = new CartProductVo(cart);
         cartProduct.setProduct(product);
-        cartProduct.setTotalPrice(product.getPrice().multiply(new BigDecimal(cartProduct.getQuantity())));
         return cartProduct;
     }
 
@@ -65,7 +71,17 @@ public class CartService implements ICartService {
         PageHelper.startPage(page, pageSize);
         PageHelper.orderBy(Const.UPDATE_TIME + " " + Const.OrderBy.PRICE_DESC);
         List<CartDo> carts = cartDoMapper.selectALLByUserId(userId);
-
-        return null;
+        List<CartProductVo> cartProducts = Lists.newArrayList();
+        for (CartDo cart : carts) {
+            ProductDo product = productDoMapper.selectByPrimaryKey(cart.getProductId());
+            if (product == null) {
+                product = new ProductDo();
+                product.setStatus(Const.Product.STATUS_DELETE);
+            }
+            CartProductVo cartProduct = new CartProductVo(cart);
+            cartProduct.setProduct(product);
+            cartProducts.add(cartProduct);
+        }
+        return new PageInfo<>(cartProducts);
     }
 }
