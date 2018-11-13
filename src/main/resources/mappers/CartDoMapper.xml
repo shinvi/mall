@@ -24,6 +24,12 @@
         from mmall_cart
         where id = #{id,jdbcType=INTEGER}
     </delete>
+    <delete id="deleteByPrimaryKeyNUserId" parameterType="map">
+        delete
+        from mmall_cart
+        where id = #{id}
+          and user_id = #{userId}
+    </delete>
     <insert id="insert" parameterType="com.shinvi.mall.pojo.domain.CartDo">
         insert into mmall_cart (id, user_id, product_id, quantity, checked, create_time, update_time)
         values (#{id,jdbcType=INTEGER},

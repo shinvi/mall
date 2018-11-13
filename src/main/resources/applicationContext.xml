@@ -27,4 +27,19 @@
     <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper">
         <property name="serializationInclusion" value="NON_NULL"/>
     </bean>
+
+    <bean id="alipayClient" class="com.alipay.api.DefaultAlipayClient">
+        <constructor-arg name="serverUrl" value="https://openapi.alipaydev.com/gateway.do"/>
+        <constructor-arg name="appId" value="2016091900548155"/>
+        <constructor-arg name="privateKey"
+                         value="MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC/PnbHd8zTUUuOPxFuNKhqYL0KJIdwVwbk3wl7S+CSXxeIh1la3YOEhvJzBKhs9eBUBz6LZEOtIWAaOg9jzXH8Ni9ZaLv/vjjLHKiFfTeBMpMH6jggL3ZDZrscjEMTGOBYeZ55HGEojrSWNYsaOHF/C69WWXbIF5tVpzOmC/xM2+g43RMuGRI7rOkd5ZudRwZrYYgC4T3f7cr7Vmrp+H/a3VSKfcX4q0bONJfP6Ek6uN/1iXuXvzkvHDJ6bPS9X55lm/dacdglHmiQq00ZTvltKxstuX+PXgyxXXN68eDgPzIXO1ffEZGyXplnxu+BPK0YlG9M2BM/kXdt+h2LMp7rAgMBAAECggEAV0QYjUKUW2UANiN/P6uVoh0MheFPUCrWAX/o4rMoAYKUyX8Bfh4QUlwFrAhXFolH2PAJUS/qVckiAjW2KhNoTO8owgKxrqxNXBlyqJ8PwcujHfx5qe4eZ/krroYuYTt7u8ObVaZmi0w7CUPbepaA67kYRC3Ert9eyUHnpoBXm3X+xeXMopT8o++W6dKd8cGvokU0arQh0CXOzRN0XOd39A1n6lEqBzGz1aN5e83Xj4opkvRQS9NbAsdSTeY78ssayYyGM6oaaek6W/OsTcWyDeTR0RCauYSjXbHWr0WhNaYwyFDEGuJIpTqmzzB+52Nctago/3EjZKKESTVfst1CeQKBgQDu3q4rZ3RMpQgfhwF19uhTOUB/IQ4wzrFNROaMfoOnYcsi9OuMxZq9vW0swrqbBefzEWEs20bgOPAtBR2j2TgsZNUrYNuOd3IsXxNLIC2TN31d19t2VSCFiv3NTAvo7gXh2iawL3stcSuMdGWS5ufDcgfN5gQ+P0c2nBwSHWLUJQKBgQDM9XBlkYDvmF72ExKvAe1QR8EMlL3TRf0tsM1RxMTaSraUgtcbOe6v6yCkgbwQLWNVZ5huGbjTfp9fYA7mY/pnZBv3fG5IwPZotw0ARj4wg3fuXuC8ALGmvC36bPETbD2xU6iPCOmPcj+KOb6Z7Bt4pxBngJN8D2IEhbvUUJYxzwKBgQDseacTcSfBeN/B1nWrwvPc8CDZum/CAd2lEUDsdZMAceAYiz9l7XpzvMQIO/9g2Uf3ao05Sxuvfq7G4vmk67agvHIMr6asM7PkGXuQNBrqU1TZQokRbNT1X9RDGbXwszM/lCgY4+id5BuowNKNy+pFou32+G/a7+ogNgvUIyNjwQKBgHg/X4wXi+AGM2CH3CRVKxg4oOhys9QqcdnGqw9YNG4l+2yyPuW4XXNUrbgWbXHIT0kiGGowKSHcXkCkqNk+uwDB2S6gEEwa+faBvtz0WTQ5TbnKbGugtJmwOgF8vQu6K4/IF1Kj1fPVAbZlHpBL1+o3igZPhzf4BnfExmhQR249AoGAItt1aM9bqVBKU4jXlPZfqezksH5LFdag+OKTHO9refbRE88e/7SnrAioE3ZPQHJ2jMQ1Gf93BpYnjqqGzwVJH2Cpl09g3FTHhj6PNzly/qwWAZaTtWqk++HoYSuS8UPuClzYdq/Fx6o0KaNHkkye+Sja7uhspT0x+SA+GdsGwXE="/>
+        <constructor-arg name="format" value="json"/>
+        <constructor-arg name="charset" value="UTF-8"/>
+        <constructor-arg name="alipayPublicKey"
+                         value="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvz52x3fM01FLjj8RbjSoamC9CiSHcFcG5N8Je0vgkl8XiIdZWt2DhIbycwSobPXgVAc+i2RDrSFgGjoPY81x/DYvWWi7/744yxyohX03gTKTB+o4IC92Q2a7HIxDExjgWHmeeRxhKI60ljWLGjhxfwuvVll2yBebVaczpgv8TNvoON0TLhkSO6zpHeWbnUcGa2GIAuE93+3K+1Zq6fh/2t1Uin3F+KtGzjSXz+hJOrjf9Yl7l785Lxwyemz0vV+eZZv3WnHYJR5okKtNGU75bSsbLbl/j14MsV1zevHg4D8yFztX3xGRsl6ZZ8bvgTytGJRvTNgTP5F3bfodizKe6wIDAQAB"/>
+        <constructor-arg name="signType" value="RSA2"/>
+    </bean>
+
+    <bean id="alipayRequest" class="com.alipay.api.request.AlipayTradePrecreateRequest" scope="prototype"/>
+
 </beans>

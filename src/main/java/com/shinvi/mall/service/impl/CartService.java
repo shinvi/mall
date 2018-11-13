@@ -12,10 +12,10 @@ import com.shinvi.mall.pojo.domain.CartDo;
 import com.shinvi.mall.pojo.domain.ProductDo;
 import com.shinvi.mall.pojo.vo.CartProductVo;
 import com.shinvi.mall.service.ICartService;
+import com.shinvi.mall.util.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -66,10 +66,39 @@ public class CartService implements ICartService {
         return cartProduct;
     }
 
+    @Transactional
+    @Override
+    public CartProductVo reduceCart(Integer userId, Integer count, Integer productId) {
+        ProductDo product = productDoMapper.selectByPrimaryKey(productId);
+        if (product == null || product.getStatus() != Const.Product.STATUS_IN_STOCK) {
+            throw new ServerResponseException("该商品不存在或已下架");
+        }
+        CartDo cart = cartDoMapper.selectByUserIdNProductId(userId, productId);
+        if (cart == null) {
+            return null;
+        }
+        if (count >= cart.getQuantity()) {
+            if (cartDoMapper.deleteByPrimaryKey(cart.getId()) <= 0) {
+                throw new ServerResponseException("购物车商品数量调整失败");
+            }
+            return null;
+        }
+        cart.setQuantity(cart.getQuantity() - count);
+        if (cart.getQuantity() > product.getStock()) {
+            throw new ServerResponseException("购物车商品数量调整失败, 商品库存不足");
+        }
+        if (cartDoMapper.updateByPrimaryKeySelective(cart) <= 0) {
+            throw new ServerResponseException("购物车商品数量调整失败");
+        }
+        CartProductVo cartProduct = new CartProductVo(cart);
+        cartProduct.setProduct(product);
+        return cartProduct;
+    }
+
     @Override
     public PageInfo<CartProductVo> getCartsByUserId(int page, int pageSize, Integer userId) {
         PageHelper.startPage(page, pageSize);
-        PageHelper.orderBy(Const.UPDATE_TIME + " " + Const.OrderBy.PRICE_DESC);
+        PageHelper.orderBy(Const.UPDATE_TIME + " " + Const.OrderBy.DESC);
         List<CartDo> carts = cartDoMapper.selectALLByUserId(userId);
         List<CartProductVo> cartProducts = Lists.newArrayList();
         for (CartDo cart : carts) {
@@ -83,5 +112,17 @@ public class CartService implements ICartService {
             cartProducts.add(cartProduct);
         }
         return new PageInfo<>(cartProducts);
+    }
+
+    @Transactional
+    @Override
+    public List<CartDo> deleteCart(Integer userId, Integer... ids) {
+        List<CartDo> carts = Lists.newArrayList();
+        for (Integer id : ids) {
+            if (cartDoMapper.deleteByPrimaryKeyNUserId(id, userId) > 0) {
+                carts.add(ObjectUtils.with(new CartDo(), cart -> cart.setId(id)));
+            }
+        }
+        return carts;
     }
 }

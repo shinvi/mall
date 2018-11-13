@@ -1,9 +1,14 @@
 package com.shinvi.mall.dao;
 
 import com.shinvi.mall.pojo.domain.ShippingDo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface ShippingDoMapper {
     int deleteByPrimaryKey(Integer id);
+
+    int deleteByUserIdNPrimaryKey(@Param("userId") Integer userId, @Param("id") Integer id);
 
     int insert(ShippingDo record);
 
@@ -11,7 +16,11 @@ public interface ShippingDoMapper {
 
     ShippingDo selectByPrimaryKey(Integer id);
 
+    List<ShippingDo> selectByUserId(Integer userId);
+
     int updateByPrimaryKeySelective(ShippingDo record);
+
+    int updateByUserIdNPrimaryKeySelective(ShippingDo record);
 
     int updateByPrimaryKey(ShippingDo record);
 }

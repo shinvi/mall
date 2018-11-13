@@ -19,9 +19,8 @@ public class ControllerExceptionAdvice {
         if (e instanceof ServerResponseException) {
             return ServerResponse.error(((ServerResponseException) e).getResponseCode());
         } else {
-            logger.error("Controller异常 : " + e.getMessage());
-            e.printStackTrace();
-            return ServerResponse.exception(e);
+            logger.error("Controller异常", e);
+            return ServerResponse.error("Controller异常 : " + e.getMessage());
         }
     }
 }

@@ -4,7 +4,6 @@ import com.shinvi.mall.pojo.domain.CartDo;
 import com.shinvi.mall.pojo.domain.ProductDo;
 import org.springframework.beans.BeanUtils;
 
-import java.math.BigDecimal;
 
 /**
  * @author 邱长海

@@ -1,6 +1,5 @@
 package com.shinvi.mall.pojo.domain;
 
-import java.util.Date;
 
 public class ShippingDo {
     private Integer id;

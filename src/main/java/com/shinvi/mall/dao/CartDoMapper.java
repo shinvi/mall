@@ -8,6 +8,8 @@ import java.util.List;
 public interface CartDoMapper {
     int deleteByPrimaryKey(Integer id);
 
+    int deleteByPrimaryKeyNUserId(@Param("id") Integer id, @Param("userId") Integer userId);
+
     int insert(CartDo record);
 
     int insertSelective(CartDo record);

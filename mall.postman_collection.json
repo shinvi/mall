@@ -903,6 +903,385 @@
 		},
 		{
 			"name": "cart",
+			"item": [
+				{
+					"name": "添加商品到购物车",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "count",
+									"value": "20",
+									"type": "text"
+								},
+								{
+									"key": "productId",
+									"value": "27",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/cart",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查看购物车",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "count",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "productId",
+									"value": "27",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/cart",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除或减少购物车中商品数量",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "count",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "productId",
+									"value": "27",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/cart/product/27",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cart",
+								"product",
+								"27"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "批量删除购物车",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "id",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "124",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/cart",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "shipping",
+			"item": [
+				{
+					"name": "添加收货地址",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "receiverName",
+									"value": "邱先生",
+									"type": "text"
+								},
+								{
+									"key": "receiverMobile",
+									"value": "18695891383",
+									"type": "text"
+								},
+								{
+									"key": "receiverProvince",
+									"value": "河南",
+									"type": "text"
+								},
+								{
+									"key": "receiverCity",
+									"value": "郑州",
+									"type": "text"
+								},
+								{
+									"key": "receiverDistrict",
+									"value": "郑东新区",
+									"type": "text"
+								},
+								{
+									"key": "receiverAddress",
+									"value": "商鼎路东风南路升龙广场3号楼A座29楼魔飞公寓",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/shipping",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shipping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除收货地址",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8080/shipping/34",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shipping",
+								"34"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改收货地址",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "receiverDistrict",
+									"value": "管城回族区",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "35",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "39",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/shipping",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shipping"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询用户所有收货地址",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "receiverDistrict",
+									"value": "管城回族区",
+									"type": "text"
+								},
+								{
+									"key": "id",
+									"value": "35",
+									"type": "text"
+								},
+								{
+									"key": "userId",
+									"value": "39",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/shipping",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"shipping"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "pay",
 			"item": []
 		}
 	]
