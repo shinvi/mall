@@ -13,8 +13,6 @@ public interface FTPUitls {
 
     String uploadFile(String directoryName, String fileName, File tempFile);
 
-    String uploadFile(String directoryName, String fileName, InputStream inputStream);
-
     String uploadFile(String directoryName, String fileName, MultipartFile tempFile);
 
     void close();

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80011
 File Encoding         : 65001
 
-Date: 2018-11-06 17:32:47
+Date: 2018-11-14 18:08:54
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,11 +29,13 @@ CREATE TABLE `mmall_cart` (
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
   PRIMARY KEY (`id`),
   KEY `user_id_index` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mmall_cart
 -- ----------------------------
+INSERT INTO `mmall_cart` VALUES ('123', '2', '28', '2', null, '2018-11-12 10:25:51', '2018-11-12 10:25:51');
+INSERT INTO `mmall_cart` VALUES ('125', '2', '27', '20', null, '2018-11-12 15:00:38', '2018-11-12 15:00:38');
 
 -- ----------------------------
 -- Table structure for mmall_category
@@ -56,7 +58,7 @@ CREATE TABLE `mmall_category` (
 INSERT INTO `mmall_category` VALUES ('100034', '0', '生活类', '1', null, '2018-11-05 16:19:37', '2018-11-05 16:33:03');
 INSERT INTO `mmall_category` VALUES ('100035', '100034', '母婴用品', '1', null, '2018-11-05 17:09:36', '2018-11-05 17:09:36');
 INSERT INTO `mmall_category` VALUES ('100036', '0', '电子数码类', '1', null, '2018-11-05 17:09:46', '2018-11-05 17:09:46');
-INSERT INTO `mmall_category` VALUES ('100037', '100035', '手机', '1', null, '2018-11-05 17:35:16', '2018-11-05 17:35:16');
+INSERT INTO `mmall_category` VALUES ('100037', '100036', '手机', '1', null, '2018-11-05 17:35:16', '2018-11-05 17:35:16');
 
 -- ----------------------------
 -- Table structure for mmall_order
@@ -83,6 +85,25 @@ CREATE TABLE `mmall_order` (
 
 -- ----------------------------
 -- Records of mmall_order
+-- ----------------------------
+INSERT INTO `mmall_order` VALUES ('5', '15941561164', '2', null, null, null, null, '10', null, null, null, null, '2018-11-14 16:17:25', '2018-11-14 16:17:32');
+
+-- ----------------------------
+-- Table structure for mmall_order_alipay
+-- ----------------------------
+DROP TABLE IF EXISTS `mmall_order_alipay`;
+CREATE TABLE `mmall_order_alipay` (
+  `order_no` bigint(20) NOT NULL COMMENT '订单编号',
+  `alipay_trade_no` varchar(100) NOT NULL COMMENT '支付宝流水号',
+  `index` int(11) NOT NULL COMMENT '订单编号索引(每次更新时自增)',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
+  PRIMARY KEY (`order_no`),
+  KEY `k_alipay_trade_no` (`alipay_trade_no`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of mmall_order_alipay
 -- ----------------------------
 
 -- ----------------------------
@@ -155,7 +176,7 @@ CREATE TABLE `mmall_product` (
 -- ----------------------------
 INSERT INTO `mmall_product` VALUES ('27', '100035', '小萌希奥纸尿裤', null, '333.jpg', '333.jpg', null, '198.64', '103', '1', '2018-11-06 10:51:59', '2018-11-06 14:08:13');
 INSERT INTO `mmall_product` VALUES ('28', '100036', '小米mix3', '小米手机', '11.jpg', '11.jpg,22.jpg', null, '3999.99', '2', '1', '2018-11-06 14:51:12', '2018-11-06 14:51:15');
-INSERT INTO `mmall_product` VALUES ('29', '10036', 'apple iphoneX', '苹果手机', null, null, null, '8999.00', '0', '3', '2018-11-06 15:14:30', '2018-11-06 15:14:33');
+INSERT INTO `mmall_product` VALUES ('29', '100037', 'apple iphoneX', '苹果手机', null, null, null, '8999.00', '0', '1', '2018-11-06 15:14:30', '2018-11-06 15:14:33');
 
 -- ----------------------------
 -- Table structure for mmall_shipping
@@ -163,23 +184,26 @@ INSERT INTO `mmall_product` VALUES ('29', '10036', 'apple iphoneX', '苹果手�
 DROP TABLE IF EXISTS `mmall_shipping`;
 CREATE TABLE `mmall_shipping` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
-  `receiver_name` varchar(20) DEFAULT NULL COMMENT '收货姓名',
-  `receiver_phone` varchar(20) DEFAULT NULL COMMENT '收货固定电话',
-  `receiver_mobile` varchar(20) DEFAULT NULL COMMENT '收货移动电话',
-  `receiver_province` varchar(20) DEFAULT NULL COMMENT '省份',
-  `receiver_city` varchar(20) DEFAULT NULL COMMENT '城市',
-  `receiver_district` varchar(20) DEFAULT NULL COMMENT '区/县',
-  `receiver_address` varchar(200) DEFAULT NULL COMMENT '详细地址',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `receiver_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '收货姓名',
+  `receiver_phone` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '收货固定电话',
+  `receiver_mobile` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '收货移动电话',
+  `receiver_province` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '省份',
+  `receiver_city` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '城市',
+  `receiver_district` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '区/县',
+  `receiver_address` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '详细地址',
   `receiver_zip` varchar(6) DEFAULT NULL COMMENT '邮编',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`),
+  KEY `user_id_index` (`user_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mmall_shipping
 -- ----------------------------
+INSERT INTO `mmall_shipping` VALUES ('33', '2', '邱先生', null, '18695891383', '河南', '郑州', '郑东新区', '商鼎路东风南路升龙广场3号楼A座29楼魔飞公寓', null, '2018-11-13 09:59:26', '2018-11-13 09:59:26');
+INSERT INTO `mmall_shipping` VALUES ('35', '2', '邱先生', null, '18695891383', '河南', '郑州', '管城回族区', '商鼎路东风南路升龙广场3号楼A座29楼魔飞公寓', null, '2018-11-13 10:53:06', '2018-11-13 10:56:03');
 
 -- ----------------------------
 -- Table structure for mmall_user

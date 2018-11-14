@@ -38,16 +38,8 @@ public class AlipayOrderVo {
         this.timeout_express = timeout_express;
     }
 
-    public AlipayOrderVo(String out_trade_no, String total_amount, String subject, String store_id) {
-        this(out_trade_no, total_amount, subject, store_id, "90m");
-    }
-
-    public AlipayOrderVo(String total_amount, String subject, String store_id) {
-        this(UUID.randomUUID().toString(), total_amount, subject, store_id, "90m");
-    }
-
-    public AlipayOrderVo(String total_amount, String subject) {
-        this(UUID.randomUUID().toString(), total_amount, subject, "N1", "90m");
+    public AlipayOrderVo(String out_trade_no, String total_amount, String subject) {
+        this(out_trade_no, total_amount, subject, null, "2m");
     }
 
     public String getOut_trade_no() {

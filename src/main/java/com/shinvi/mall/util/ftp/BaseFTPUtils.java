@@ -32,16 +32,6 @@ public abstract class BaseFTPUtils implements FTPUitls {
     }
 
     @Override
-    public String uploadFile(String directoryName, String fileName, InputStream inputStream) {
-        try (inputStream) {
-            return upload(directoryName, fileName, inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    @Override
     public String uploadFile(String directoryName, String fileName, MultipartFile tempFile) {
         try (InputStream inputStream = tempFile.getInputStream()) {
             return upload(directoryName, fileName, inputStream);

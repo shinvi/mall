@@ -47,4 +47,26 @@ public interface Const {
         int STATUS_OUT_STOCK = 2;
         int STATUS_DELETE = 3;
     }
+
+    interface Order {
+        String ORDER_NO = "orderNo";
+
+        int PAY_TYPE_ALIPAY = 1;
+        int PAY_TYPE_WECHAT = 2;
+
+        int STATUS_CANCELLED = 0;
+        int STATUS_UNPAID = 10;
+        int STATUS_PAID = 20;
+        int STATUS_SHIPPED = 40;
+        int STATUS_FINISHED = 50;
+        int STATUS_CLOSED = 60;
+    }
+
+    interface AlipayCode {
+        String SUCCESS = "10000";
+        String UN_AVAILABLE = "20000";
+        String MISS_PARAMS = "40001";
+        String ILLEGAL_PARAMS = "40002";
+        String FAILED = "40004";
+    }
 }

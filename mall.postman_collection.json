@@ -1281,8 +1281,49 @@
 			]
 		},
 		{
-			"name": "pay",
-			"item": []
+			"name": "order",
+			"item": [
+				{
+					"name": "订单支付",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "orderNo",
+									"value": "15941561164",
+									"type": "text"
+								},
+								{
+									"key": "payType",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/order/pay",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"pay"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
