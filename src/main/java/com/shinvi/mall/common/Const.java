@@ -68,5 +68,12 @@ public interface Const {
         String MISS_PARAMS = "40001";
         String ILLEGAL_PARAMS = "40002";
         String FAILED = "40004";
+
+        String SUB_ACQ_TRADE_NOT_EXIST = "ACQ.TRADE_NOT_EXIST";
+
+        String QUERY_WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
+        String QUERY_TRADE_CLOSED = "TRADE_CLOSED";
+        String QUERY_TRADE_SUCCESS = "TRADE_SUCCESS";
+        String QUERY_TRADE_FINISHED = "TRADE_FINISHED";
     }
 }

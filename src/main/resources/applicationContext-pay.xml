@@ -30,5 +30,6 @@
         <constructor-arg name="signType" value="RSA2"/>
     </bean>
 
-    <bean id="alipayRequest" class="com.alipay.api.request.AlipayTradePrecreateRequest" scope="prototype"/>
+    <bean id="alipayTradePrecreateRequest" class="com.alipay.api.request.AlipayTradePrecreateRequest" scope="prototype"/>
+    <bean id="alipayTradeQueryRequest" class="com.alipay.api.request.AlipayTradeQueryRequest" scope="prototype"/>
 </beans>

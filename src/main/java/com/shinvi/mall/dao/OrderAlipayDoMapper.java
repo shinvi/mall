@@ -8,15 +8,11 @@ import com.shinvi.mall.pojo.domain.OrderAlipayDo;
 public interface OrderAlipayDoMapper {
     int deleteByPrimaryKey(Long orderNo);
 
-    int insert(OrderAlipayDo orderAlipay);
-
-    int insertSelective(OrderAlipayDo orderAlipay);
+    int insert(Long orderNo);
 
     OrderAlipayDo selectByPrimaryKey(Long orderNo);
 
     OrderAlipayDo selectByAlipayTradeNo(String alipayTradeNo);
 
-    int updateByPrimaryKeySelective(OrderAlipayDo orderAlipay);
-
-    int updateByPrimaryKey(OrderAlipayDo orderAlipay);
+    int updateByPrimaryKey(Long orderNo);
 }

@@ -9,7 +9,8 @@ public enum ResponseCode {
     SERVER_ERROR(5, "请求出错"),
     NEED_LOGIN(10, "您的登录已过期，请重新登录"),
     PERMISSION_ERROR(6, "您暂无此项操作的权限"),
-    ILLEGAL_ARGUMENT(2, "非法的请求参数");
+    ILLEGAL_ARGUMENT(2, "非法的请求参数"),
+    ALIPAY_SUCCEDD(30,"该订单交易已完成");
 
     private final int code;
     private String desc;

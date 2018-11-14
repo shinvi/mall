@@ -6,12 +6,12 @@ package com.shinvi.mall.pojo.domain;
 public class OrderAlipayDo {
     private Long orderNo;
     private String alipayTradeNo;
-    private Integer index;
+    private Integer n;
 
-    public OrderAlipayDo(Long orderNo, String alipayTradeNo, Integer index) {
+    public OrderAlipayDo(Long orderNo, String alipayTradeNo, Integer n) {
         this.orderNo = orderNo;
         this.alipayTradeNo = alipayTradeNo;
-        this.index = index;
+        this.n = n;
     }
 
     public OrderAlipayDo() {
@@ -33,11 +33,11 @@ public class OrderAlipayDo {
         this.alipayTradeNo = alipayTradeNo;
     }
 
-    public Integer getIndex() {
-        return index;
+    public Integer getN() {
+        return n;
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
+    public void setN(Integer n) {
+        this.n = n;
     }
 }
