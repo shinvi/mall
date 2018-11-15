@@ -3,8 +3,7 @@
 <mapper namespace="com.shinvi.mall.dao.OrderDoMapper">
     <resultMap id="BaseResultMap" type="com.shinvi.mall.pojo.domain.OrderDo">
         <constructor>
-            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
-            <arg column="order_no" javaType="java.lang.Long" jdbcType="BIGINT"/>
+            <idArg column="order_no" javaType="java.lang.Long" jdbcType="BIGINT"/>
             <arg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
             <arg column="shipping_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
             <arg column="payment" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
@@ -18,14 +17,14 @@
         </constructor>
     </resultMap>
     <sql id="Base_Column_List">
-        id, order_no, user_id, shipping_id, payment, payment_type, postage, status, payment_time,
+        order_no, user_id, shipping_id, payment, payment_type, postage, status, payment_time,
         send_time, end_time, close_time
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from mmall_order
-        where id = #{id,jdbcType=INTEGER}
+        where order_no = #{orderNo}
     </select>
     <select id="selectByUserIdNPrimaryKey" parameterType="map" resultMap="BaseResultMap">
         select
@@ -35,11 +34,10 @@
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from mmall_order
-        where id = #{id,jdbcType=INTEGER}
+        where order_no = #{orderNo}
     </delete>
     <insert id="insert" parameterType="com.shinvi.mall.pojo.domain.OrderDo">
-        insert into mmall_order (id,
-                                 order_no,
+        insert into mmall_order (order_no,
                                  user_id,
                                  shipping_id,
                                  payment,
@@ -52,8 +50,7 @@
                                  close_time,
                                  create_time,
                                  update_time)
-        values (#{id,jdbcType=INTEGER},
-                #{orderNo,jdbcType=BIGINT},
+        values (#{orderNo,jdbcType=BIGINT},
                 #{userId,jdbcType=INTEGER},
                 #{shippingId,jdbcType=INTEGER},
                 #{payment,jdbcType=DECIMAL},
@@ -70,9 +67,6 @@
     <insert id="insertSelective" parameterType="com.shinvi.mall.pojo.domain.OrderDo">
         insert into mmall_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
             <if test="orderNo != null">
                 order_no,
             </if>
@@ -110,9 +104,6 @@
             update_time,
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=INTEGER},
-            </if>
             <if test="orderNo != null">
                 #{orderNo,jdbcType=BIGINT},
             </if>
@@ -153,9 +144,6 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.shinvi.mall.pojo.domain.OrderDo">
         update mmall_order
         <set>
-            <if test="orderNo != null">
-                order_no = #{orderNo,jdbcType=BIGINT},
-            </if>
             <if test="userId != null">
                 user_id = #{userId,jdbcType=INTEGER},
             </if>
@@ -188,12 +176,11 @@
             </if>
             update_time = now(),
         </set>
-        where id = #{id,jdbcType=INTEGER}
+        where order_no = #{orderNo}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.shinvi.mall.pojo.domain.OrderDo">
         update mmall_order
-        set order_no     = #{orderNo,jdbcType=BIGINT},
-            user_id      = #{userId,jdbcType=INTEGER},
+        set user_id      = #{userId,jdbcType=INTEGER},
             shipping_id  = #{shippingId,jdbcType=INTEGER},
             payment      = #{payment,jdbcType=DECIMAL},
             payment_type = #{paymentType,jdbcType=INTEGER},
@@ -204,6 +191,6 @@
             end_time     = #{endTime,jdbcType=TIMESTAMP},
             close_time   = #{closeTime,jdbcType=TIMESTAMP},
             update_time  = now()
-        where id = #{id,jdbcType=INTEGER}
+        where order_no = #{orderNo}
     </update>
 </mapper>

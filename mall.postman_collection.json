@@ -955,19 +955,8 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "count",
-									"value": "1",
-									"type": "text"
-								},
-								{
-									"key": "productId",
-									"value": "27",
-									"type": "text"
-								}
-							]
+							"mode": "raw",
+							"raw": ""
 						},
 						"url": {
 							"raw": "localhost:8080/cart",
@@ -1244,25 +1233,8 @@
 							}
 						],
 						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "receiverDistrict",
-									"value": "管城回族区",
-									"type": "text"
-								},
-								{
-									"key": "id",
-									"value": "35",
-									"type": "text"
-								},
-								{
-									"key": "userId",
-									"value": "39",
-									"type": "text",
-									"disabled": true
-								}
-							]
+							"mode": "raw",
+							"raw": ""
 						},
 						"url": {
 							"raw": "http://localhost:8080/shipping",

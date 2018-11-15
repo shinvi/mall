@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shinvi.mall.dao.OrderInfoDoMapper">
+    <resultMap id="BaseResultMap" type="com.shinvi.mall.pojo.domain.OrderInfoDo">
+        <constructor>
+            <idArg column="order_no" javaType="java.lang.Long" jdbcType="BIGINT"/>
+            <arg column="out_trade_no" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <arg column="pay_type" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <arg column="n" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        </constructor>
+    </resultMap>
+    <sql id="Base_Column_List">
+        order_no, out_trade_no, pay_type, n
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_order_info
+        where order_no = #{orderNo}
+    </select>
+    <select id="selectByOutTradeNo" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_order_info
+        where out_trade_no = #{outTradeNo}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        delete
+        from mmall_order_info
+        where order_no = #{orderNo}
+    </delete>
+    <insert id="insert" parameterType="com.shinvi.mall.pojo.domain.OrderInfoDo">
+        insert into mmall_order_info (order_no, out_trade_no, pay_type, n, create_time, update_time)
+        values (#{orderNo}, CONCAT_WS('_', #{orderNo}, 0), #{payType}, 0, now(), now())
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.shinvi.mall.pojo.domain.OrderInfoDo">
+        update mmall_order_info
+        set out_trade_no = CONCAT_WS('_', order_no, n + 1),
+            n            = n + 1,
+            pay_type     = #{payType},
+            update_time  = now()
+        where order_no = #{orderNo}
+    </update>
+</mapper>

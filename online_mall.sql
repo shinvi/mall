@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80011
 File Encoding         : 65001
 
-Date: 2018-11-14 18:08:54
+Date: 2018-11-15 18:01:20
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -65,9 +65,8 @@ INSERT INTO `mmall_category` VALUES ('100037', '100036', '手机', '1', null, '2
 -- ----------------------------
 DROP TABLE IF EXISTS `mmall_order`;
 CREATE TABLE `mmall_order` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '订单id',
-  `order_no` bigint(20) DEFAULT NULL COMMENT '订单号',
-  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
+  `order_no` bigint(20) NOT NULL COMMENT '订单号',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
   `shipping_id` int(11) DEFAULT NULL COMMENT '订单地址',
   `payment` decimal(20,2) DEFAULT NULL COMMENT '实际支付金额,元',
   `payment_type` int(4) DEFAULT NULL COMMENT '支付类型 1-在线支付',
@@ -79,32 +78,34 @@ CREATE TABLE `mmall_order` (
   `close_time` datetime DEFAULT NULL COMMENT '交易关闭时间',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`order_no`),
   UNIQUE KEY `uk_order_no` (`order_no`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mmall_order
 -- ----------------------------
-INSERT INTO `mmall_order` VALUES ('5', '15941561164', '2', null, null, null, null, '10', null, null, null, null, '2018-11-14 16:17:25', '2018-11-14 16:17:32');
+INSERT INTO `mmall_order` VALUES ('3', '2', null, null, null, null, '10', null, null, null, null, '2018-11-14 16:17:25', '2018-11-14 16:17:32');
 
 -- ----------------------------
--- Table structure for mmall_order_alipay
+-- Table structure for mmall_order_info
 -- ----------------------------
-DROP TABLE IF EXISTS `mmall_order_alipay`;
-CREATE TABLE `mmall_order_alipay` (
+DROP TABLE IF EXISTS `mmall_order_info`;
+CREATE TABLE `mmall_order_info` (
   `order_no` bigint(20) NOT NULL COMMENT '订单编号',
-  `alipay_trade_no` varchar(100) NOT NULL COMMENT '支付宝流水号',
-  `index` int(11) NOT NULL COMMENT '订单编号索引(每次更新时自增)',
+  `pay_type` int(10) NOT NULL COMMENT '支付平台:1-支付宝,2-微信',
+  `out_trade_no` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '支付宝流水号',
+  `n` int(11) NOT NULL COMMENT '订单编号索引(每次更新时自增)',
   `create_time` datetime NOT NULL COMMENT '创建时间',
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
   PRIMARY KEY (`order_no`),
-  KEY `k_alipay_trade_no` (`alipay_trade_no`) USING BTREE
+  KEY `k_alipay_trade_no` (`out_trade_no`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of mmall_order_alipay
+-- Records of mmall_order_info
 -- ----------------------------
+INSERT INTO `mmall_order_info` VALUES ('3', '1', '3_9', '9', '2018-11-15 17:04:12', '2018-11-15 17:24:12');
 
 -- ----------------------------
 -- Table structure for mmall_order_item
@@ -130,26 +131,7 @@ CREATE TABLE `mmall_order_item` (
 -- ----------------------------
 -- Records of mmall_order_item
 -- ----------------------------
-
--- ----------------------------
--- Table structure for mmall_pay_info
--- ----------------------------
-DROP TABLE IF EXISTS `mmall_pay_info`;
-CREATE TABLE `mmall_pay_info` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL COMMENT '用户id',
-  `order_no` bigint(20) DEFAULT NULL COMMENT '订单号',
-  `pay_platform` int(10) DEFAULT NULL COMMENT '支付平台:1-支付宝,2-微信',
-  `platform_number` varchar(200) DEFAULT NULL COMMENT '支付流水号',
-  `platform_status` varchar(20) DEFAULT NULL COMMENT '支付状态',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of mmall_pay_info
--- ----------------------------
+INSERT INTO `mmall_order_item` VALUES ('10', '2', '3', '27', '小萌希奥纸尿裤', null, '198.64', '1', '198.64', '2018-11-15 11:45:28', '2018-11-15 11:45:30');
 
 -- ----------------------------
 -- Table structure for mmall_product

@@ -1,7 +1,5 @@
 package com.shinvi.mall.pojo.vo;
 
-import java.util.UUID;
-
 /**
  * @author 邱长海
  */
@@ -39,7 +37,7 @@ public class AlipayOrderVo {
     }
 
     public AlipayOrderVo(String out_trade_no, String total_amount, String subject) {
-        this(out_trade_no, total_amount, subject, null, "2m");
+        this(out_trade_no, total_amount, subject, null, "1m");
     }
 
     public AlipayOrderVo(String out_trade_no) {

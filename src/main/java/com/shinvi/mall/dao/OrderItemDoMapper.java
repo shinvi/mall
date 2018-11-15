@@ -11,6 +11,8 @@ public interface OrderItemDoMapper {
 
     OrderItemDo selectByPrimaryKey(Integer id);
 
+    OrderItemDo selectByOrderNo(Long orderNo);
+
     int updateByPrimaryKeySelective(OrderItemDo record);
 
     int updateByPrimaryKey(OrderItemDo record);
