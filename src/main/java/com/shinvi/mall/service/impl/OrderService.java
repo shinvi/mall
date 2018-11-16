@@ -22,11 +22,16 @@ import com.shinvi.mall.pojo.domain.OrderItemDo;
 import com.shinvi.mall.pojo.vo.AlipayOrderVo;
 import com.shinvi.mall.pojo.vo.QrCodeOrderVo;
 import com.shinvi.mall.service.IOrderService;
+import com.shinvi.mall.util.BigDecimalUtils;
+import com.shinvi.mall.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 
 /**
@@ -44,7 +49,7 @@ public class OrderService extends BaseService implements IOrderService {
     private AlipayClient alipayClient;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonUtils jsonUtils;
 
     @Autowired
     private OrderDoMapper orderDoMapper;
@@ -76,6 +81,11 @@ public class OrderService extends BaseService implements IOrderService {
             throw new ServerResponseException("此订单不可支付");
         }
 
+        List<OrderItemDo> orderItems = orderItemDoMapper.selectByOrderNo(order.getOrderNo());
+        if (orderItems == null || orderItems.isEmpty()) {
+            throw new ServerResponseException(ResponseCode.SERVER_ERROR.setDesc("订单信息不完整,请重新生成此订单后再支付"));
+        }
+
         OrderInfoDo orderInfo = orderInfoDoMapper.selectByPrimaryKey(order.getOrderNo());
         try {
             if (orderInfo != null) {
@@ -95,7 +105,7 @@ public class OrderService extends BaseService implements IOrderService {
                 throw new ServerResponseException("获取订单支付流水号失败");
             }
 
-            return dispatchPayType(order, orderInfo);
+            return dispatchPayType(order, orderInfo, orderItems);
 
 
         } catch (Exception e) {
@@ -121,21 +131,52 @@ public class OrderService extends BaseService implements IOrderService {
             throw new ServerResponseException("该订单不存在或您没有权限查看此订单");
         }
         if (order.getStatus() == Const.Order.STATUS_UNPAID) {
+            AlipayTradeQueryResponse queryResponse;
             try {
-                AlipayTradeQueryResponse queryResponse = queryAlipayOrder(orderInfo.getOutTradeNo());
+                queryResponse = queryAlipayOrder(orderInfo.getOutTradeNo());
             } catch (Exception e) {
                 logger.error("订单支付状态查询失败", e);
-                throw new ServerResponseException("订单支付状态查询失败,请稍后再试");
+                throw new ServerResponseException(ResponseCode.PAY_STATUS_FAILED);
+            }
+            if (Const.AlipayCode.FAILED.equals(queryResponse.getCode()) &&
+                    Const.AlipayCode.SUB_ACQ_TRADE_NOT_EXIST.equals(queryResponse.getSubCode())) {
+                throw new ServerResponseException(ResponseCode.PAY_STATUS_NOT_EXIST);
+            }
+            if (!Const.AlipayCode.SUCCESS.equals(queryResponse.getCode())) {
+                throw new ServerResponseException(ResponseCode.PAY_STATUS_FAILED);
+            }
+            if (Const.AlipayCode.QUERY_TRADE_FINISHED.equals(queryResponse.getTradeStatus()) ||
+                    Const.AlipayCode.QUERY_TRADE_SUCCESS.equals(queryResponse.getTradeStatus())) {
+                order.setStatus(Const.Order.STATUS_PAID);
+                if (orderDoMapper.updateByPrimaryKeySelective(order) <= 0) {
+                    throw new ServerResponseException(ResponseCode.PAY_STATUS_EXCEPTION);
+                }
+            }
+            if (Const.AlipayCode.QUERY_WAIT_BUYER_PAY.equals(queryResponse.getTradeStatus())) {
+                throw new ServerResponseException(ResponseCode.PAY_STATUS_WATTING);
             }
         }
         return order;
     }
 
-    private QrCodeOrderVo dispatchPayType(OrderDo order, OrderInfoDo orderInfo) throws Exception {
+    @Transactional
+    @Override
+    public OrderDo addOrder(Integer userId, String products) throws Error {
+        OrderDo order=new OrderDo();
+        order.setUserId(userId);
+        List<OrderItemDo> orderItems = jsonUtils.fromListJson(products, OrderItemDo.class);
+        orderItems.forEach(orderItem -> {
+            orderItem.setId(null);
+            orderItem.setUserId(userId);
+        });
+        return null;
+    }
+
+    private QrCodeOrderVo dispatchPayType(OrderDo order, OrderInfoDo orderInfo, List<OrderItemDo> orderItems) throws Exception {
         QrCodeOrderVo qrcode = null;
         switch (orderInfo.getPayType()) {
             case Const.Order.PAY_TYPE_ALIPAY:
-                qrcode = addAlipayOrder(order, orderInfo);
+                qrcode = addAlipayOrder(order, orderInfo, orderItems);
                 break;
             case Const.Order.PAY_TYPE_WECHAT:
                 break;
@@ -164,15 +205,18 @@ public class OrderService extends BaseService implements IOrderService {
         }
     }
 
-    private QrCodeOrderVo addAlipayOrder(OrderDo order, OrderInfoDo orderAlipay) throws Exception {
-        OrderItemDo orderItem = orderItemDoMapper.selectByOrderNo(order.getOrderNo());
-        if (orderItem == null) {
-            throw new ServerResponseException(ResponseCode.SERVER_ERROR.setDesc("订单信息不完整,请重新生成此订单后再支付"));
+    private QrCodeOrderVo addAlipayOrder(OrderDo order, OrderInfoDo orderAlipay, List<OrderItemDo> orderItems) throws Exception {
+        BigDecimal totalPrice = BigDecimal.ZERO;
+        for (OrderItemDo item : orderItems) {
+            totalPrice = BigDecimalUtils.add(totalPrice, item.getTotalPrice());
         }
+        String productName = orderItems.get(0).getProductName() + "等" + orderItems.size() + "件商品";
+
         AlipayTradePrecreateRequest request = (AlipayTradePrecreateRequest) applicationContext.getBean("alipayTradePrecreateRequest");
         AlipayOrderVo alipayOrder = new AlipayOrderVo(orderAlipay.getOutTradeNo(),
-                orderItem.getTotalPrice().toString(), orderItem.getProductName());
-        request.setBizContent(objectMapper.writeValueAsString(alipayOrder));
+                totalPrice.toString(), productName);
+        request.setBizContent(jsonUtils.toJson(alipayOrder));
+
         AlipayTradePrecreateResponse precreateResponse = alipayClient.execute(request);
         if (Const.AlipayCode.SUCCESS.equals(precreateResponse.getCode())) {
             String qrcode = precreateResponse.getQrCode();
@@ -186,14 +230,14 @@ public class OrderService extends BaseService implements IOrderService {
     private AlipayTradeQueryResponse queryAlipayOrder(String alipayTradeNo) throws Exception {
         AlipayTradeQueryRequest query = (AlipayTradeQueryRequest) applicationContext.getBean("alipayTradeQueryRequest");
         AlipayOrderVo alipayOrderVo = new AlipayOrderVo(alipayTradeNo);
-        query.setBizContent(objectMapper.writeValueAsString(alipayOrderVo));
+        query.setBizContent(jsonUtils.toJson(alipayOrderVo));
         return alipayClient.execute(query);
     }
 
     private AlipayTradeCancelResponse cancelAlipayOrder(String alipayTradeNo) throws Exception {
         AlipayTradeCancelRequest cancel = (AlipayTradeCancelRequest) applicationContext.getBean("alipayTradeCancelRequest");
         AlipayOrderVo alipayOrderVo = new AlipayOrderVo(alipayTradeNo);
-        cancel.setBizContent(objectMapper.writeValueAsString(alipayOrderVo));
+        cancel.setBizContent(jsonUtils.toJson(alipayOrderVo));
         return alipayClient.execute(cancel);
     }
 

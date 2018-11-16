@@ -11,4 +11,6 @@ public interface IOrderService {
     QrCodeOrderVo payOrder(Integer userId, Long orderNo, Integer payType);
 
     OrderDo getQrCodeOrderStatus(Integer userId, String outTradeNo);
+
+    OrderDo addOrder(Integer userId, String products);
 }

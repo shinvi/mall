@@ -1271,7 +1271,7 @@
 							"formdata": [
 								{
 									"key": "orderNo",
-									"value": "15941561164",
+									"value": "3",
 									"type": "text"
 								},
 								{
@@ -1290,6 +1290,36 @@
 							"path": [
 								"order",
 								"pay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "根据订单支付流水号查询订单支付状态",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/order/pay/3_10",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"pay",
+								"3_10"
 							]
 						}
 					},

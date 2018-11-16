@@ -3,12 +3,16 @@ package com.shinvi.mall.controller.v1.portal;
 import com.shinvi.mall.base.aop.annotation.ValidToken;
 import com.shinvi.mall.common.Const;
 import com.shinvi.mall.pojo.domain.OrderDo;
+import com.shinvi.mall.pojo.domain.OrderItemDo;
 import com.shinvi.mall.pojo.vo.QrCodeOrderVo;
 import com.shinvi.mall.pojo.vo.ServerResponse;
 import com.shinvi.mall.service.IOrderService;
 import com.shinvi.mall.util.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author 邱长海
@@ -38,6 +42,15 @@ public class OrderController {
     @RequestMapping(value = "/pay/{" + Const.Order.OUT_TRADE_NO + "}", method = RequestMethod.GET)
     public ServerResponse<OrderDo> getQrCodeOrderStatus(@RequestAttribute(Const.User.USER_ID) Integer userId,
                                                         @PathVariable(Const.Order.OUT_TRADE_NO) String outTradeNo) {
+        return ServerResponse.success(orderService.getQrCodeOrderStatus(userId, outTradeNo));
+    }
 
+    @ValidToken
+    @RequestMapping(method = RequestMethod.POST)
+    public ServerResponse<OrderDo> addOrder(@RequestAttribute(Const.User.USER_ID) Integer userId, String products) {
+        if (StringUtils.isBlank(products)) {
+            return ServerResponse.error("没有可结算的商品");
+        }
+        return ServerResponse.success(orderService.addOrder(userId, products));
     }
 }

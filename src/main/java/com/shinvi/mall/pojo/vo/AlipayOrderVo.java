@@ -37,7 +37,7 @@ public class AlipayOrderVo {
     }
 
     public AlipayOrderVo(String out_trade_no, String total_amount, String subject) {
-        this(out_trade_no, total_amount, subject, null, "1m");
+        this(out_trade_no, total_amount, subject, null, "2m");
     }
 
     public AlipayOrderVo(String out_trade_no) {

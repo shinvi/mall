@@ -11,7 +11,10 @@ public enum ResponseCode {
     PERMISSION_ERROR(6, "您暂无此项操作的权限"),
     ILLEGAL_ARGUMENT(2, "非法的请求参数"),
     PAY_SUCCEDD(30, "该订单交易已完成"),
-    PAY_STATUS_FAILED(31, "订单支付状态查询失败,请稍后再试");
+    PAY_STATUS_EXCEPTION(31, "订单支付出现异常状况,请联系工作人员处理"),
+    PAY_STATUS_FAILED(32, "订单支付状态查询失败,请稍后再重新查询"),
+    PAY_STATUS_NOT_EXIST(33, "该订单支付尚未开始,请稍后再重新查询"),
+    PAY_STATUS_WATTING(34, "该订单支付正在进行中,请稍后再重新查询");
 
     private final int code;
     private String desc;

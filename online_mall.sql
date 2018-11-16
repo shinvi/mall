@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80011
 File Encoding         : 65001
 
-Date: 2018-11-15 18:01:20
+Date: 2018-11-16 18:03:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -85,7 +85,7 @@ CREATE TABLE `mmall_order` (
 -- ----------------------------
 -- Records of mmall_order
 -- ----------------------------
-INSERT INTO `mmall_order` VALUES ('3', '2', null, null, null, null, '10', null, null, null, null, '2018-11-14 16:17:25', '2018-11-14 16:17:32');
+INSERT INTO `mmall_order` VALUES ('3', '2', null, null, null, null, '10', null, null, null, null, '2018-11-14 16:17:25', '2018-11-16 11:36:54');
 
 -- ----------------------------
 -- Table structure for mmall_order_info
@@ -105,7 +105,7 @@ CREATE TABLE `mmall_order_info` (
 -- ----------------------------
 -- Records of mmall_order_info
 -- ----------------------------
-INSERT INTO `mmall_order_info` VALUES ('3', '1', '3_9', '9', '2018-11-15 17:04:12', '2018-11-15 17:24:12');
+INSERT INTO `mmall_order_info` VALUES ('3', '1', '3_12', '12', '2018-11-15 17:04:12', '2018-11-16 11:39:25');
 
 -- ----------------------------
 -- Table structure for mmall_order_item
@@ -132,6 +132,7 @@ CREATE TABLE `mmall_order_item` (
 -- Records of mmall_order_item
 -- ----------------------------
 INSERT INTO `mmall_order_item` VALUES ('10', '2', '3', '27', '小萌希奥纸尿裤', null, '198.64', '1', '198.64', '2018-11-15 11:45:28', '2018-11-15 11:45:30');
+INSERT INTO `mmall_order_item` VALUES ('11', '2', '3', '27', '小萌希奥纸尿裤', null, '198.64', '3', '595.92', '2018-11-16 11:33:11', '2018-11-16 11:33:13');
 
 -- ----------------------------
 -- Table structure for mmall_product
