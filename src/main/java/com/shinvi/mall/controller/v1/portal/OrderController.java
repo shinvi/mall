@@ -4,6 +4,7 @@ import com.shinvi.mall.base.aop.annotation.ValidToken;
 import com.shinvi.mall.common.Const;
 import com.shinvi.mall.pojo.domain.OrderDo;
 import com.shinvi.mall.pojo.domain.OrderItemDo;
+import com.shinvi.mall.pojo.domain.ShippingDo;
 import com.shinvi.mall.pojo.vo.QrCodeOrderVo;
 import com.shinvi.mall.pojo.vo.ServerResponse;
 import com.shinvi.mall.service.IOrderService;
@@ -47,9 +48,12 @@ public class OrderController {
 
     @ValidToken
     @RequestMapping(method = RequestMethod.POST)
-    public ServerResponse<OrderDo> addOrder(@RequestAttribute(Const.User.USER_ID) Integer userId, String products) {
+    public ServerResponse<OrderDo> addOrder(@RequestAttribute(Const.User.USER_ID) Integer userId, String products, Integer shippingId) {
         if (StringUtils.isBlank(products)) {
             return ServerResponse.error("没有可结算的商品");
+        }
+        if (shippingId == null) {
+            return ServerResponse.error("收货地址不能为空");
         }
         return ServerResponse.success(orderService.addOrder(userId, products));
     }

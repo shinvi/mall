@@ -7,7 +7,6 @@ import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeCancelResponse;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shinvi.mall.base.aop.annotation.Transactional;
 import com.shinvi.mall.base.exception.ServerResponseException;
 import com.shinvi.mall.base.service.BaseService;
@@ -16,6 +15,7 @@ import com.shinvi.mall.common.ResponseCode;
 import com.shinvi.mall.dao.OrderInfoDoMapper;
 import com.shinvi.mall.dao.OrderDoMapper;
 import com.shinvi.mall.dao.OrderItemDoMapper;
+import com.shinvi.mall.dao.ShippingDoMapper;
 import com.shinvi.mall.pojo.domain.OrderInfoDo;
 import com.shinvi.mall.pojo.domain.OrderDo;
 import com.shinvi.mall.pojo.domain.OrderItemDo;
@@ -59,6 +59,9 @@ public class OrderService extends BaseService implements IOrderService {
 
     @Autowired
     private OrderItemDoMapper orderItemDoMapper;
+
+    @Autowired
+    private ShippingDoMapper shippingDoMapper;
 
 
     /**
@@ -161,9 +164,11 @@ public class OrderService extends BaseService implements IOrderService {
 
     @Transactional
     @Override
-    public OrderDo addOrder(Integer userId, String products) throws Error {
-        OrderDo order=new OrderDo();
+    public OrderDo addOrder(Integer userId, String products, Integer shippingId) throws Error {
+        OrderDo order = new OrderDo();
         order.setUserId(userId);
+
+        order.setShippingId(shippingId);
         List<OrderItemDo> orderItems = jsonUtils.fromListJson(products, OrderItemDo.class);
         orderItems.forEach(orderItem -> {
             orderItem.setId(null);

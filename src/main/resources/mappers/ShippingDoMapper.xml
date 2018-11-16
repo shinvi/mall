@@ -223,4 +223,8 @@
             update_time       = now()
         where id = #{id,jdbcType=INTEGER}
     </update>
+
+    <select id="countByUserIdNPrimaryKey" parameterType="map" resultType="int">
+        select count()
+    </select>
 </mapper>

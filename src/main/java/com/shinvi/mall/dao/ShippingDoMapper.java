@@ -23,4 +23,6 @@ public interface ShippingDoMapper {
     int updateByUserIdNPrimaryKeySelective(ShippingDo record);
 
     int updateByPrimaryKey(ShippingDo record);
+
+    int countByUserIdNPrimaryKey(@Param("id") Integer id, @Param("userId") Integer userId);
 }
