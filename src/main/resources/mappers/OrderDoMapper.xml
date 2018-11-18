@@ -38,31 +38,35 @@
     </delete>
     <insert id="insert" parameterType="com.shinvi.mall.pojo.domain.OrderDo">
         insert into mmall_order (order_no,
-                                 user_id,
-                                 shipping_id,
-                                 payment,
-                                 payment_type,
-                                 postage,
-                                 status,
-                                 payment_time,
-                                 send_time,
-                                 end_time,
-                                 close_time,
-                                 create_time,
-                                 update_time)
+        user_id,
+        shipping_id,
+        payment,
+        payment_type,
+        postage,
+        status,
+        payment_time,
+        send_time,
+        end_time,
+        close_time,
+        create_time,
+        update_time)
         values (#{orderNo,jdbcType=BIGINT},
-                #{userId,jdbcType=INTEGER},
-                #{shippingId,jdbcType=INTEGER},
-                #{payment,jdbcType=DECIMAL},
-                #{paymentType,jdbcType=INTEGER},
-                #{postage,jdbcType=INTEGER},
-                #{status,jdbcType=INTEGER},
-                #{paymentTime,jdbcType=TIMESTAMP},
-                #{sendTime,jdbcType=TIMESTAMP},
-                #{endTime,jdbcType=TIMESTAMP},
-                #{closeTime,jdbcType=TIMESTAMP},
-                now(),
-                now())
+        #{userId,jdbcType=INTEGER},
+        #{shippingId,jdbcType=INTEGER},
+        #{payment,jdbcType=DECIMAL},
+        #{paymentType,jdbcType=INTEGER},
+        #{postage,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER},
+        #{paymentTime,jdbcType=TIMESTAMP},
+        #{sendTime,jdbcType=TIMESTAMP},
+        #{endTime,jdbcType=TIMESTAMP},
+        #{closeTime,jdbcType=TIMESTAMP},
+        now(),
+        now())
+
+        <selectKey keyProperty="orderNo" order="AFTER" resultType="long">
+            select last_insert_id()
+        </selectKey>
     </insert>
     <insert id="insertSelective" parameterType="com.shinvi.mall.pojo.domain.OrderDo">
         insert into mmall_order

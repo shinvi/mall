@@ -41,20 +41,36 @@ public class OrderController {
 
     @ValidToken
     @RequestMapping(value = "/pay/{" + Const.Order.OUT_TRADE_NO + "}", method = RequestMethod.GET)
-    public ServerResponse<OrderDo> getQrCodeOrderStatus(@RequestAttribute(Const.User.USER_ID) Integer userId,
-                                                        @PathVariable(Const.Order.OUT_TRADE_NO) String outTradeNo) {
+    public ServerResponse<OrderDo> getQrCodeOrderPayStatus(@RequestAttribute(Const.User.USER_ID) Integer userId,
+                                                           @PathVariable(Const.Order.OUT_TRADE_NO) String outTradeNo) {
         return ServerResponse.success(orderService.getQrCodeOrderStatus(userId, outTradeNo));
     }
 
     @ValidToken
-    @RequestMapping(method = RequestMethod.POST)
-    public ServerResponse<OrderDo> addOrder(@RequestAttribute(Const.User.USER_ID) Integer userId, String products, Integer shippingId) {
-        if (StringUtils.isBlank(products)) {
-            return ServerResponse.error("没有可结算的商品");
+    @RequestMapping(value = "/pay/{" + Const.Order.OUT_TRADE_NO + "}", method = RequestMethod.DELETE)
+    public ServerResponse cancelOrderPayByOutTradeNo(@RequestAttribute(Const.User.USER_ID) Integer userId,
+                                                     @PathVariable(Const.Order.OUT_TRADE_NO) String outTradeNo) {
+
+    }
+
+    @ValidToken
+    @RequestMapping(value = "/product/{" + Const.ID + "}", method = RequestMethod.POST)
+    public ServerResponse<OrderDo> addOrderByProduct(@RequestAttribute(Const.User.USER_ID) Integer userId,
+                                                     @PathVariable(Const.ID) Integer productId,
+                                                     Integer quantity, Integer shippingId) {
+        if (quantity == null || quantity <= 0) {
+            return ServerResponse.error("商品数量必须大于0");
         }
         if (shippingId == null) {
             return ServerResponse.error("收货地址不能为空");
         }
-        return ServerResponse.success(orderService.addOrder(userId, products));
+        return ServerResponse.success(orderService.addOrderByProduct(userId, productId, quantity, shippingId));
+    }
+
+    @ValidToken
+    @RequestMapping(value = "/cart/{" + Const.ID + "}", method = RequestMethod.POST)
+    public ServerResponse<OrderDo> addOrderByCart(@RequestAttribute(Const.User.USER_ID) Integer userId,
+                                                  @PathVariable(Const.ID) String cartIds) {
+
     }
 }

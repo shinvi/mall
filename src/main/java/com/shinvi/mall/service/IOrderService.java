@@ -12,5 +12,7 @@ public interface IOrderService {
 
     OrderDo getQrCodeOrderStatus(Integer userId, String outTradeNo);
 
-    OrderDo addOrder(Integer userId, String products, Integer shippingId);
+    void cancelOrderPayByOutTradeNo(Integer userId, String outTradeNo);
+
+    OrderDo addOrderByProduct(Integer userId, Integer productId, Integer quantity, Integer shippingId);
 }

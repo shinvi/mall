@@ -225,6 +225,8 @@
     </update>
 
     <select id="countByUserIdNPrimaryKey" parameterType="map" resultType="int">
-        select count()
+        select count(1)
+        from mmall_shipping
+        where user_id = #{userId} and id = #{id}
     </select>
 </mapper>

@@ -12,13 +12,11 @@ import com.shinvi.mall.base.exception.ServerResponseException;
 import com.shinvi.mall.base.service.BaseService;
 import com.shinvi.mall.common.Const;
 import com.shinvi.mall.common.ResponseCode;
-import com.shinvi.mall.dao.OrderInfoDoMapper;
-import com.shinvi.mall.dao.OrderDoMapper;
-import com.shinvi.mall.dao.OrderItemDoMapper;
-import com.shinvi.mall.dao.ShippingDoMapper;
+import com.shinvi.mall.dao.*;
 import com.shinvi.mall.pojo.domain.OrderInfoDo;
 import com.shinvi.mall.pojo.domain.OrderDo;
 import com.shinvi.mall.pojo.domain.OrderItemDo;
+import com.shinvi.mall.pojo.domain.ProductDo;
 import com.shinvi.mall.pojo.vo.AlipayOrderVo;
 import com.shinvi.mall.pojo.vo.QrCodeOrderVo;
 import com.shinvi.mall.service.IOrderService;
@@ -63,9 +61,12 @@ public class OrderService extends BaseService implements IOrderService {
     @Autowired
     private ShippingDoMapper shippingDoMapper;
 
+    @Autowired
+    private ProductDoMapper productDoMapper;
+
 
     /**
-     * 下单,先去订单信息表查当前订单最后一次保存的支付流水号
+     * 支付下单,先去订单信息表查当前订单最后一次保存的支付流水号
      * 如果此流水号不存在,请求对应支付平台接口下单
      * 如果此流水号是正在等待支付的状态,撤消此流水,然后重新生成新的流水号请求对应平台接口下单
      * 如果此流水号是已关闭或者已退款状态,生成新的流水号请求对应平台接口下单
@@ -110,7 +111,6 @@ public class OrderService extends BaseService implements IOrderService {
 
             return dispatchPayType(order, orderInfo, orderItems);
 
-
         } catch (Exception e) {
             logger.error("订单支付失败", e);
             String msg = "订单支付失败,请5秒后重试";
@@ -133,48 +133,99 @@ public class OrderService extends BaseService implements IOrderService {
         if (order == null) {
             throw new ServerResponseException("该订单不存在或您没有权限查看此订单");
         }
-        if (order.getStatus() == Const.Order.STATUS_UNPAID) {
-            AlipayTradeQueryResponse queryResponse;
-            try {
-                queryResponse = queryAlipayOrder(orderInfo.getOutTradeNo());
-            } catch (Exception e) {
-                logger.error("订单支付状态查询失败", e);
-                throw new ServerResponseException(ResponseCode.PAY_STATUS_FAILED);
-            }
-            if (Const.AlipayCode.FAILED.equals(queryResponse.getCode()) &&
-                    Const.AlipayCode.SUB_ACQ_TRADE_NOT_EXIST.equals(queryResponse.getSubCode())) {
-                throw new ServerResponseException(ResponseCode.PAY_STATUS_NOT_EXIST);
-            }
-            if (!Const.AlipayCode.SUCCESS.equals(queryResponse.getCode())) {
-                throw new ServerResponseException(ResponseCode.PAY_STATUS_FAILED);
-            }
-            if (Const.AlipayCode.QUERY_TRADE_FINISHED.equals(queryResponse.getTradeStatus()) ||
-                    Const.AlipayCode.QUERY_TRADE_SUCCESS.equals(queryResponse.getTradeStatus())) {
-                order.setStatus(Const.Order.STATUS_PAID);
-                if (orderDoMapper.updateByPrimaryKeySelective(order) <= 0) {
-                    throw new ServerResponseException(ResponseCode.PAY_STATUS_EXCEPTION);
+        switch (orderInfo.getPayType()) {
+            case Const.Order.PAY_TYPE_ALIPAY:
+                if (order.getStatus() == Const.Order.STATUS_UNPAID) {
+                    AlipayTradeQueryResponse queryResponse;
+                    try {
+                        queryResponse = queryAlipayOrder(orderInfo.getOutTradeNo());
+                    } catch (Exception e) {
+                        logger.error("订单支付状态查询失败", e);
+                        throw new ServerResponseException(ResponseCode.PAY_STATUS_FAILED);
+                    }
+                    if (Const.AlipayCode.FAILED.equals(queryResponse.getCode()) &&
+                            Const.AlipayCode.SUB_ACQ_TRADE_NOT_EXIST.equals(queryResponse.getSubCode())) {
+                        throw new ServerResponseException(ResponseCode.PAY_STATUS_NOT_EXIST);
+                    }
+                    if (!Const.AlipayCode.SUCCESS.equals(queryResponse.getCode())) {
+                        throw new ServerResponseException(ResponseCode.PAY_STATUS_FAILED);
+                    }
+                    if (Const.AlipayCode.QUERY_TRADE_FINISHED.equals(queryResponse.getTradeStatus()) ||
+                            Const.AlipayCode.QUERY_TRADE_SUCCESS.equals(queryResponse.getTradeStatus())) {
+                        order.setStatus(Const.Order.STATUS_PAID);
+                        order.setPaymentTime(queryResponse.getSendPayDate());
+                        if (orderDoMapper.updateByPrimaryKeySelective(order) <= 0) {
+                            throw new ServerResponseException(ResponseCode.PAY_STATUS_EXCEPTION);
+                        }
+                    }
+                    if (Const.AlipayCode.QUERY_WAIT_BUYER_PAY.equals(queryResponse.getTradeStatus())) {
+                        throw new ServerResponseException(ResponseCode.PAY_STATUS_WATTING);
+                    }
                 }
-            }
-            if (Const.AlipayCode.QUERY_WAIT_BUYER_PAY.equals(queryResponse.getTradeStatus())) {
-                throw new ServerResponseException(ResponseCode.PAY_STATUS_WATTING);
-            }
+                break;
+            case Const.Order.PAY_TYPE_WECHAT:
+                break;
+            default:
+                throw new ServerResponseException("无效的支付方式");
         }
         return order;
     }
 
+
+    // TODO: 2018-11-16 取消支付
+    @Override
+    public void cancelOrderPayByOutTradeNo(Integer userId, String outTradeNo) {
+
+    }
+
     @Transactional
     @Override
-    public OrderDo addOrder(Integer userId, String products, Integer shippingId) throws Error {
+    public OrderDo addOrderByProduct(Integer userId, Integer productId, Integer quantity, Integer shippingId) {
+        if (shippingDoMapper.countByUserIdNPrimaryKey(shippingId, userId) <= 0) {
+            throw new ServerResponseException("收货地址不存在");
+        }
+
+        ProductDo product = productDoMapper.selectByPrimaryKey(productId);
+        if (product == null) {
+            throw new ServerResponseException("商品不存在");
+        }
+        if (product.getStatus() != Const.Product.STATUS_IN_STOCK) {
+            throw new ServerResponseException("商品已下线或已删除");
+        }
+
+        if (quantity > product.getStock()) {
+            throw new ServerResponseException("商品库存不足");
+        }
+        product.setStock(product.getStock() - quantity);
+        if (productDoMapper.updateByPrimaryKeySelective(product) <= 0) {
+            throw new ServerResponseException("更新商品库存失败");
+        }
+
+        OrderItemDo orderItem = new OrderItemDo();
+        orderItem.setUserId(userId);
+        orderItem.setProductMainImage(product.getMainImage());
+        orderItem.setProductName(product.getName());
+        orderItem.setCurrentUnitPrice(product.getPrice());
+        orderItem.setProductId(productId);
+        orderItem.setQuantity(quantity);
+        orderItem.setTotalPrice(BigDecimalUtils.multiply(product.getPrice(), quantity));
+
+
         OrderDo order = new OrderDo();
         order.setUserId(userId);
-
         order.setShippingId(shippingId);
-        List<OrderItemDo> orderItems = jsonUtils.fromListJson(products, OrderItemDo.class);
-        orderItems.forEach(orderItem -> {
-            orderItem.setId(null);
-            orderItem.setUserId(userId);
-        });
-        return null;
+        order.setStatus(Const.Order.STATUS_UNPAID);
+        order.setPayment(orderItem.getTotalPrice());
+        if (orderDoMapper.insert(order) <= 0) {
+            throw new ServerResponseException("生成订单失败");
+        }
+
+        orderItem.setOrderNo(order.getOrderNo());
+        if (orderItemDoMapper.insert(orderItem) <= 0) {
+            throw new ServerResponseException("生成订单失败,保存订单商品信息失败");
+        }
+
+        return order;
     }
 
     private QrCodeOrderVo dispatchPayType(OrderDo order, OrderInfoDo orderInfo, List<OrderItemDo> orderItems) throws Exception {
