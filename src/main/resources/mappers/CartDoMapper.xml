@@ -19,6 +19,16 @@
         from mmall_cart
         where id = #{id,jdbcType=INTEGER}
     </select>
+
+    <select id="selectByUserIdMPrimaryKeys" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_cart
+        where user_id = #{userId} and id in
+        <foreach collection="ids" index="index" item="item" separator="," close=")" open="(">
+            #{item}
+        </foreach>
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from mmall_cart

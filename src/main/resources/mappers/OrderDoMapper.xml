@@ -16,6 +16,67 @@
             <arg column="close_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
         </constructor>
     </resultMap>
+    <resultMap id="orderVo" type="com.shinvi.mall.pojo.vo.OrderVo">
+        <result property="orderNo" column="order_no" javaType="java.lang.Long" jdbcType="BIGINT"/>
+        <result property="payment" column="payment" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
+        <result property="paymentType" column="payment_type" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="postage" column="postage" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="status" column="status" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="paymentTime" column="payment_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="sendTime" column="send_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="endTime" column="end_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="closeTime" column="close_time" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <association property="shipping" javaType="com.shinvi.mall.pojo.domain.ShippingDo">
+            <result property="id" column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <result property="receiverName" column="receiver_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <result column="receiver_phone" property="receiverPhone" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <result property="receiverMobile" column="receiver_mobile" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <result property="receiverProvince" column="receiver_province" javaType="java.lang.String"
+                    jdbcType="VARCHAR"/>
+            <result property="receiverCity" column="receiver_city" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <result property="receiverDistrict" column="receiver_district" javaType="java.lang.String"
+                    jdbcType="VARCHAR"/>
+            <result property="receiverAddress" column="receiver_address" javaType="java.lang.String"
+                    jdbcType="VARCHAR"/>
+            <result property="receiverZip" column="receiver_zip" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        </association>
+        <collection property="orderItems" ofType="com.shinvi.mall.pojo.domain.OrderItemDo">
+            <result property="id" column="id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <result property="productId" column="product_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <result property="productName" column="product_name" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <result property="productMainImage" column="product_main_image" javaType="java.lang.String"
+                    jdbcType="VARCHAR"/>
+            <result property="currentUnitPrice" column="current_unit_price" javaType="java.math.BigDecimal"
+                    jdbcType="DECIMAL"/>
+            <result property="quantity" column="quantity" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+            <result property="totalPrice" column="total_price" javaType="java.math.BigDecimal" jdbcType="DECIMAL"/>
+        </collection>
+    </resultMap>
+    <select id="selectOrdersByConditions" parameterType="map" resultMap="orderVo">
+        select
+        o.order_no,o.payment,o.payment_type,o.postage,o.status,o.payment_time,o.send_time,o.end_time,o.close_time,
+        s.id,s.receiver_name,s.receiver_phone,s.receiver_mobile,s.receiver_province,s.receiver_city,s.receiver_district,
+        s.receiver_address,s.receiver_zip,oi.id,oi.product_id,oi.product_name,oi.product_main_image,oi.current_unit_price,
+        oi.quantity,oi.total_price
+        from (select
+        <include refid="Base_Column_List"/>,update_time
+        from mmall_order
+        <where>
+            <if test="status!=null">
+                and status = #{status}
+            </if>
+            <if test="userId!=null">
+                and user_id = #{userId}
+            </if>
+            <if test="orderNo!=null">
+                and order_no = #{orderNo}
+            </if>
+        </where>
+        ) o join mmall_order_item oi on
+        o.order_no = oi.order_no
+        join mmall_shipping s on o.shipping_id = s.id
+        order by o.update_time desc
+    </select>
     <sql id="Base_Column_List">
         order_no, user_id, shipping_id, payment, payment_type, postage, status, payment_time,
         send_time, end_time, close_time
@@ -31,6 +92,7 @@
         <include refid="Base_Column_List"/>
         from mmall_order where user_id = #{userId} and order_no = #{orderNo}
     </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from mmall_order

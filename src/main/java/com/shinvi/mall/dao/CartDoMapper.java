@@ -16,6 +16,8 @@ public interface CartDoMapper {
 
     CartDo selectByPrimaryKey(Integer id);
 
+    List<CartDo> selectByUserIdMPrimaryKeys(@Param("userId") Integer userId, @Param("ids") Integer[] ids);
+
     int updateByPrimaryKeySelective(CartDo record);
 
     int updateByPrimaryKey(CartDo record);

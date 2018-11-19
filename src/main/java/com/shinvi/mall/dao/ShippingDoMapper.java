@@ -16,6 +16,8 @@ public interface ShippingDoMapper {
 
     ShippingDo selectByPrimaryKey(Integer id);
 
+    ShippingDo selectByUserIdNPrimaryKey(@Param("id") Integer id, @Param("userId") Integer userId);
+
     List<ShippingDo> selectByUserId(Integer userId);
 
     int updateByPrimaryKeySelective(ShippingDo record);

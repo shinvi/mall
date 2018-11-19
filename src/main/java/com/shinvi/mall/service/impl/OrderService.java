@@ -7,17 +7,17 @@ import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayTradeCancelResponse;
 import com.alipay.api.response.AlipayTradePrecreateResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.shinvi.mall.base.aop.annotation.Transactional;
 import com.shinvi.mall.base.exception.ServerResponseException;
 import com.shinvi.mall.base.service.BaseService;
 import com.shinvi.mall.common.Const;
 import com.shinvi.mall.common.ResponseCode;
 import com.shinvi.mall.dao.*;
-import com.shinvi.mall.pojo.domain.OrderInfoDo;
-import com.shinvi.mall.pojo.domain.OrderDo;
-import com.shinvi.mall.pojo.domain.OrderItemDo;
-import com.shinvi.mall.pojo.domain.ProductDo;
+import com.shinvi.mall.pojo.domain.*;
 import com.shinvi.mall.pojo.vo.AlipayOrderVo;
+import com.shinvi.mall.pojo.vo.OrderVo;
 import com.shinvi.mall.pojo.vo.QrCodeOrderVo;
 import com.shinvi.mall.service.IOrderService;
 import com.shinvi.mall.util.BigDecimalUtils;
@@ -26,10 +26,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -42,6 +49,9 @@ public class OrderService extends BaseService implements IOrderService {
 
     @Autowired
     private ApplicationContext applicationContext;
+
+    @Autowired
+    private DataSourceTransactionManager transactionManager;
 
     @Autowired
     private AlipayClient alipayClient;
@@ -63,6 +73,9 @@ public class OrderService extends BaseService implements IOrderService {
 
     @Autowired
     private ProductDoMapper productDoMapper;
+
+    @Autowired
+    private CartDoMapper cartDoMapper;
 
 
     /**
@@ -133,34 +146,35 @@ public class OrderService extends BaseService implements IOrderService {
         if (order == null) {
             throw new ServerResponseException("该订单不存在或您没有权限查看此订单");
         }
+        if (order.getStatus() != Const.Order.STATUS_UNPAID) {
+            return order;
+        }
         switch (orderInfo.getPayType()) {
             case Const.Order.PAY_TYPE_ALIPAY:
-                if (order.getStatus() == Const.Order.STATUS_UNPAID) {
-                    AlipayTradeQueryResponse queryResponse;
-                    try {
-                        queryResponse = queryAlipayOrder(orderInfo.getOutTradeNo());
-                    } catch (Exception e) {
-                        logger.error("订单支付状态查询失败", e);
-                        throw new ServerResponseException(ResponseCode.PAY_STATUS_FAILED);
+                AlipayTradeQueryResponse queryResponse;
+                try {
+                    queryResponse = queryAlipayOrder(orderInfo.getOutTradeNo());
+                } catch (Exception e) {
+                    logger.error("订单支付状态查询失败", e);
+                    throw new ServerResponseException(ResponseCode.PAY_STATUS_FAILED);
+                }
+                if (Const.AlipayCode.FAILED.equals(queryResponse.getCode()) &&
+                        Const.AlipayCode.SUB_ACQ_TRADE_NOT_EXIST.equals(queryResponse.getSubCode())) {
+                    throw new ServerResponseException(ResponseCode.PAY_STATUS_NOT_EXIST);
+                }
+                if (!Const.AlipayCode.SUCCESS.equals(queryResponse.getCode())) {
+                    throw new ServerResponseException(ResponseCode.PAY_STATUS_FAILED);
+                }
+                if (Const.AlipayCode.QUERY_TRADE_FINISHED.equals(queryResponse.getTradeStatus()) ||
+                        Const.AlipayCode.QUERY_TRADE_SUCCESS.equals(queryResponse.getTradeStatus())) {
+                    order.setStatus(Const.Order.STATUS_PAID);
+                    order.setPaymentTime(queryResponse.getSendPayDate());
+                    if (orderDoMapper.updateByPrimaryKeySelective(order) <= 0) {
+                        throw new ServerResponseException(ResponseCode.PAY_STATUS_EXCEPTION);
                     }
-                    if (Const.AlipayCode.FAILED.equals(queryResponse.getCode()) &&
-                            Const.AlipayCode.SUB_ACQ_TRADE_NOT_EXIST.equals(queryResponse.getSubCode())) {
-                        throw new ServerResponseException(ResponseCode.PAY_STATUS_NOT_EXIST);
-                    }
-                    if (!Const.AlipayCode.SUCCESS.equals(queryResponse.getCode())) {
-                        throw new ServerResponseException(ResponseCode.PAY_STATUS_FAILED);
-                    }
-                    if (Const.AlipayCode.QUERY_TRADE_FINISHED.equals(queryResponse.getTradeStatus()) ||
-                            Const.AlipayCode.QUERY_TRADE_SUCCESS.equals(queryResponse.getTradeStatus())) {
-                        order.setStatus(Const.Order.STATUS_PAID);
-                        order.setPaymentTime(queryResponse.getSendPayDate());
-                        if (orderDoMapper.updateByPrimaryKeySelective(order) <= 0) {
-                            throw new ServerResponseException(ResponseCode.PAY_STATUS_EXCEPTION);
-                        }
-                    }
-                    if (Const.AlipayCode.QUERY_WAIT_BUYER_PAY.equals(queryResponse.getTradeStatus())) {
-                        throw new ServerResponseException(ResponseCode.PAY_STATUS_WATTING);
-                    }
+                }
+                if (Const.AlipayCode.QUERY_WAIT_BUYER_PAY.equals(queryResponse.getTradeStatus())) {
+                    throw new ServerResponseException(ResponseCode.PAY_STATUS_WATTING);
                 }
                 break;
             case Const.Order.PAY_TYPE_WECHAT:
@@ -172,16 +186,101 @@ public class OrderService extends BaseService implements IOrderService {
     }
 
 
-    // TODO: 2018-11-16 取消支付
     @Override
     public void cancelOrderPayByOutTradeNo(Integer userId, String outTradeNo) {
-
+        OrderInfoDo orderInfo = orderInfoDoMapper.selectByOutTradeNo(outTradeNo);
+        if (orderInfo == null) {
+            throw new ServerResponseException("该支付流水号不存在");
+        }
+        OrderDo order = orderDoMapper.selectByUserIdNPrimaryKey(userId, orderInfo.getOrderNo());
+        if (order == null) {
+            throw new ServerResponseException("该订单不存在或您没有权限操作此订单");
+        }
+        if (order.getStatus() != Const.Order.STATUS_UNPAID) {
+            throw new ServerResponseException("该订单已支付成功或已关闭");
+        }
+        try {
+            dispatchCancelOldPayOrder(orderInfo);
+        } catch (Exception e) {
+            logger.error("订单支付取消失败", e);
+            String msg = "订单支付取消失败";
+            if (e instanceof ServerResponseException && ((ServerResponseException) e).getExtrasCode() != null) {
+                msg = ((ServerResponseException) e).getExtrasCode().getDesc();
+            }
+            throw new ServerResponseException(msg);
+        }
     }
 
     @Transactional
     @Override
-    public OrderDo addOrderByProduct(Integer userId, Integer productId, Integer quantity, Integer shippingId) {
-        if (shippingDoMapper.countByUserIdNPrimaryKey(shippingId, userId) <= 0) {
+    public OrderVo addOrderByProduct(Integer userId, Integer productId, Integer quantity, Integer shippingId) {
+        return addOrderImpl(userId, productId, quantity, shippingId);
+    }
+
+    @Override
+    public List<OrderVo> addOrdersByCarts(Integer userId, Integer[] cartIds, Integer shippingId) {
+        List<CartDo> carts = cartDoMapper.selectByUserIdMPrimaryKeys(userId, cartIds);
+        List<OrderVo> orders = new ArrayList<>();
+        for (CartDo cart : carts) {
+            TransactionStatus transaction = transactionManager.getTransaction(new DefaultTransactionDefinition(TransactionDefinition.PROPAGATION_REQUIRES_NEW));
+            try {
+                OrderVo order = addOrderImpl(userId, cart.getProductId(), cart.getQuantity(), shippingId);
+                if (cartDoMapper.deleteByPrimaryKey(cart.getId()) <= 0) {
+                    throw new ServerResponseException("删除购物车失败");
+                }
+                transactionManager.commit(transaction);
+                orders.add(order);
+            } catch (Exception e) {
+                logger.error("生成订单失败", e);
+                transactionManager.rollback(transaction);
+            }
+        }
+        return orders;
+    }
+
+    @Transactional
+    @Override
+    public OrderDo cancelOrder(Integer userId, Long orderNo) {
+        OrderDo order = orderDoMapper.selectByUserIdNPrimaryKey(userId, orderNo);
+        if (order == null) {
+            throw new ServerResponseException("该订单不存在或您没有权限查看此订单");
+        }
+        if (order.getStatus() != Const.Order.STATUS_UNPAID) {
+            throw new ServerResponseException("该订单不可取消");
+        }
+        order.setStatus(Const.Order.STATUS_CANCELLED);
+        if (orderDoMapper.updateByPrimaryKeySelective(order) <= 0) {
+            throw new ServerResponseException("取消失败");
+        }
+        return order;
+    }
+
+    @Override
+    public PageInfo<OrderVo> getOrdersByConditions(Integer userId, int page, int pageSize, Integer status, Long orderNo) {
+        PageHelper.startPage(page, pageSize);
+        return new PageInfo<>(orderDoMapper.selectOrdersByConditions(userId, status, orderNo));
+    }
+
+    @Override
+    public OrderDo shipOrder(Long orderNo) {
+        OrderDo order = orderDoMapper.selectByPrimaryKey(orderNo);
+        if (order == null) {
+            throw new ServerResponseException("订单不存在");
+        }
+        if (order.getStatus() != Const.Order.STATUS_PAID) {
+            throw new ServerResponseException("该订单已发货、未支付或已取消");
+        }
+        order.setStatus(Const.Order.STATUS_SHIPPED);
+        order.setSendTime(new Date());
+        if (orderDoMapper.updateByPrimaryKeySelective(order) <= 0) {
+            throw new ServerResponseException("设置订单发货失败");
+        }
+        return order;
+    }
+
+    private OrderVo addOrderImpl(Integer userId, Integer productId, Integer quantity, Integer shippingId) {
+        ShippingDo shipping = shippingDoMapper.selectByUserIdNPrimaryKey(shippingId, userId);
+        if (shipping == null) {
             throw new ServerResponseException("收货地址不存在");
         }
 
@@ -224,11 +323,15 @@ public class OrderService extends BaseService implements IOrderService {
         if (orderItemDoMapper.insert(orderItem) <= 0) {
             throw new ServerResponseException("生成订单失败,保存订单商品信息失败");
         }
-
-        return order;
+        OrderVo orderVo = new OrderVo(order);
+        orderVo.setOrderItems(List.of(orderItem));
+        orderVo.setShipping(shipping);
+        return orderVo;
     }
 
-    private QrCodeOrderVo dispatchPayType(OrderDo order, OrderInfoDo orderInfo, List<OrderItemDo> orderItems) throws Exception {
+
+    private QrCodeOrderVo dispatchPayType(OrderDo order, OrderInfoDo orderInfo, List<OrderItemDo> orderItems) throws
+            Exception {
         QrCodeOrderVo qrcode = null;
         switch (orderInfo.getPayType()) {
             case Const.Order.PAY_TYPE_ALIPAY:
@@ -261,7 +364,8 @@ public class OrderService extends BaseService implements IOrderService {
         }
     }
 
-    private QrCodeOrderVo addAlipayOrder(OrderDo order, OrderInfoDo orderAlipay, List<OrderItemDo> orderItems) throws Exception {
+    private QrCodeOrderVo addAlipayOrder(OrderDo order, OrderInfoDo orderAlipay, List<OrderItemDo> orderItems) throws
+            Exception {
         BigDecimal totalPrice = BigDecimal.ZERO;
         for (OrderItemDo item : orderItems) {
             totalPrice = BigDecimalUtils.add(totalPrice, item.getTotalPrice());

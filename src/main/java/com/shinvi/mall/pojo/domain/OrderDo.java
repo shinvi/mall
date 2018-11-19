@@ -1,5 +1,7 @@
 package com.shinvi.mall.pojo.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -7,8 +9,10 @@ public class OrderDo {
 
     private Long orderNo;
 
+    @JsonIgnore
     private Integer userId;
 
+    @JsonIgnore
     private Integer shippingId;
 
     private BigDecimal payment;

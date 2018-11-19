@@ -25,7 +25,13 @@
         from mmall_shipping
         where id = #{id,jdbcType=INTEGER}
     </select>
-
+    <select id="selectByUserIdNPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from mmall_shipping
+        where user_id = #{userId}
+        and id = #{id}
+    </select>
     <select id="selectByUserId" parameterType="integer" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
@@ -227,6 +233,7 @@
     <select id="countByUserIdNPrimaryKey" parameterType="map" resultType="int">
         select count(1)
         from mmall_shipping
-        where user_id = #{userId} and id = #{id}
+        where user_id = #{userId}
+          and id = #{id}
     </select>
 </mapper>
