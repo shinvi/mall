@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "09d0c208-7094-47fb-8e86-cb496d45bda6",
+		"_postman_id": "5a414f34-788c-4858-9d1b-0e57a5f142ef",
 		"name": "mall",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -668,10 +668,7 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
+						"body": {},
 						"url": {
 							"raw": "http://localhost:8080/manage/product?id=27",
 							"protocol": "http",
@@ -923,12 +920,12 @@
 							"formdata": [
 								{
 									"key": "count",
-									"value": "20",
+									"value": "10",
 									"type": "text"
 								},
 								{
 									"key": "productId",
-									"value": "27",
+									"value": "30",
 									"type": "text"
 								}
 							]
@@ -1149,10 +1146,7 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
+						"body": {},
 						"url": {
 							"raw": "http://localhost:8080/shipping/34",
 							"protocol": "http",
@@ -1332,7 +1326,43 @@
 					"response": []
 				},
 				{
-					"name": "创建订单(商品)",
+					"name": "生成订单(购物车结算)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "shippingId",
+									"value": "35",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8080/order/cart/128",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"cart",
+								"128"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "生成订单(单个商品结算)",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -1349,28 +1379,115 @@
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
+							"mode": "urlencoded",
+							"urlencoded": [
 								{
 									"key": "products",
-									"value": "[{\"productId\":28,\"quantity\":5},{\"productId\":29,\"quantity\":2}]",
-									"type": "text"
+									"value": "[{\"productId\":27}]",
+									"type": "text",
+									"disabled": true
 								},
 								{
-									"key": "shippingId",
-									"value": "35",
-									"type": "text"
+									"key": "receiverName",
+									"value": "邱长海",
+									"type": "text",
+									"disabled": true
 								}
 							]
 						},
 						"url": {
-							"raw": "localhost:8080/order",
+							"raw": "localhost:8080/order/27",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"order",
+								"27"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获得系统所有订单",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/order?status=10",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
 								"order"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manage/order",
+			"item": [
+				{
+					"name": "获取所有订单",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "version",
+								"value": "1.0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "localhost:8080/manage/order?status=10",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"manage",
+								"order"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "10"
+								},
+								{
+									"key": "userId",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "orderNo",
+									"value": "7",
+									"disabled": true
+								}
 							]
 						}
 					},

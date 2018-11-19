@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80011
 File Encoding         : 65001
 
-Date: 2018-11-16 18:03:10
+Date: 2018-11-19 17:27:05
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -29,12 +29,11 @@ CREATE TABLE `mmall_cart` (
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
   PRIMARY KEY (`id`),
   KEY `user_id_index` (`user_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=126 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mmall_cart
 -- ----------------------------
-INSERT INTO `mmall_cart` VALUES ('123', '2', '28', '2', null, '2018-11-12 10:25:51', '2018-11-12 10:25:51');
 INSERT INTO `mmall_cart` VALUES ('125', '2', '27', '20', null, '2018-11-12 15:00:38', '2018-11-12 15:00:38');
 
 -- ----------------------------
@@ -65,7 +64,7 @@ INSERT INTO `mmall_category` VALUES ('100037', '100036', '手机', '1', null, '2
 -- ----------------------------
 DROP TABLE IF EXISTS `mmall_order`;
 CREATE TABLE `mmall_order` (
-  `order_no` bigint(20) NOT NULL COMMENT '订单号',
+  `order_no` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '订单号',
   `user_id` int(11) NOT NULL COMMENT '用户id',
   `shipping_id` int(11) DEFAULT NULL COMMENT '订单地址',
   `payment` decimal(20,2) DEFAULT NULL COMMENT '实际支付金额,元',
@@ -80,12 +79,15 @@ CREATE TABLE `mmall_order` (
   `update_time` datetime NOT NULL COMMENT '最后一次更新时间',
   PRIMARY KEY (`order_no`),
   UNIQUE KEY `uk_order_no` (`order_no`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mmall_order
 -- ----------------------------
-INSERT INTO `mmall_order` VALUES ('3', '2', null, null, null, null, '10', null, null, null, null, '2018-11-14 16:17:25', '2018-11-16 11:36:54');
+INSERT INTO `mmall_order` VALUES ('4', '2', '33', '7999.98', null, null, '10', null, null, null, null, '2018-11-19 14:37:47', '2018-11-19 14:37:47');
+INSERT INTO `mmall_order` VALUES ('5', '2', '33', '19999.95', null, null, '50', '2018-11-19 17:21:49', '2018-11-19 17:23:04', '2018-11-19 17:23:55', null, '2018-11-19 15:04:16', '2018-11-19 17:22:41');
+INSERT INTO `mmall_order` VALUES ('6', '2', '33', '17998.00', null, null, '10', null, null, null, null, '2018-11-19 15:04:16', '2018-11-19 15:04:16');
+INSERT INTO `mmall_order` VALUES ('7', '22', '35', '1600.00', null, null, '10', null, null, null, null, '2018-11-19 16:55:42', '2018-11-19 16:55:42');
 
 -- ----------------------------
 -- Table structure for mmall_order_info
@@ -105,7 +107,7 @@ CREATE TABLE `mmall_order_info` (
 -- ----------------------------
 -- Records of mmall_order_info
 -- ----------------------------
-INSERT INTO `mmall_order_info` VALUES ('3', '1', '3_12', '12', '2018-11-15 17:04:12', '2018-11-16 11:39:25');
+INSERT INTO `mmall_order_info` VALUES ('5', '1', '5_1', '1', '2018-11-19 17:19:43', '2018-11-19 17:21:09');
 
 -- ----------------------------
 -- Table structure for mmall_order_item
@@ -126,13 +128,15 @@ CREATE TABLE `mmall_order_item` (
   PRIMARY KEY (`id`),
   KEY `idx_order_no` (`order_no`) USING BTREE,
   KEY `idx_order_no_user_id` (`user_id`,`order_no`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=113 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of mmall_order_item
 -- ----------------------------
-INSERT INTO `mmall_order_item` VALUES ('10', '2', '3', '27', '小萌希奥纸尿裤', null, '198.64', '1', '198.64', '2018-11-15 11:45:28', '2018-11-15 11:45:30');
-INSERT INTO `mmall_order_item` VALUES ('11', '2', '3', '27', '小萌希奥纸尿裤', null, '198.64', '3', '595.92', '2018-11-16 11:33:11', '2018-11-16 11:33:13');
+INSERT INTO `mmall_order_item` VALUES ('113', '2', '4', '28', '小米mix3', '11.jpg', '3999.99', '2', '7999.98', '2018-11-19 14:37:47', '2018-11-19 14:37:47');
+INSERT INTO `mmall_order_item` VALUES ('114', '2', '5', '28', '小米mix3', '11.jpg', '3999.99', '5', '19999.95', '2018-11-19 15:04:16', '2018-11-19 15:04:16');
+INSERT INTO `mmall_order_item` VALUES ('115', '2', '6', '29', 'apple iphoneX', null, '8999.00', '2', '17998.00', '2018-11-19 15:04:16', '2018-11-19 15:04:16');
+INSERT INTO `mmall_order_item` VALUES ('116', '22', '7', '30', '惠氏婴幼儿奶粉1段', 'huishi.jpg', '160.00', '10', '1600.00', '2018-11-19 16:55:42', '2018-11-19 16:55:42');
 
 -- ----------------------------
 -- Table structure for mmall_product
@@ -158,8 +162,9 @@ CREATE TABLE `mmall_product` (
 -- Records of mmall_product
 -- ----------------------------
 INSERT INTO `mmall_product` VALUES ('27', '100035', '小萌希奥纸尿裤', null, '333.jpg', '333.jpg', null, '198.64', '103', '1', '2018-11-06 10:51:59', '2018-11-06 14:08:13');
-INSERT INTO `mmall_product` VALUES ('28', '100036', '小米mix3', '小米手机', '11.jpg', '11.jpg,22.jpg', null, '3999.99', '2', '1', '2018-11-06 14:51:12', '2018-11-06 14:51:15');
-INSERT INTO `mmall_product` VALUES ('29', '100037', 'apple iphoneX', '苹果手机', null, null, null, '8999.00', '0', '1', '2018-11-06 15:14:30', '2018-11-06 15:14:33');
+INSERT INTO `mmall_product` VALUES ('28', '100036', '小米mix3', '小米手机', '11.jpg', '11.jpg,22.jpg', null, '3999.99', '45', '1', '2018-11-06 14:51:12', '2018-11-19 15:04:16');
+INSERT INTO `mmall_product` VALUES ('29', '100037', 'apple iphoneX', '苹果手机', null, null, null, '8999.00', '18', '1', '2018-11-06 15:14:30', '2018-11-19 15:04:16');
+INSERT INTO `mmall_product` VALUES ('30', '100035', '惠氏婴幼儿奶粉1段', '爱尔兰进口', 'huishi.jpg', 'huishi.jpg', '0-6个月', '160.00', '1990', '1', '2018-11-19 16:51:34', '2018-11-19 16:55:42');
 
 -- ----------------------------
 -- Table structure for mmall_shipping
@@ -186,7 +191,7 @@ CREATE TABLE `mmall_shipping` (
 -- Records of mmall_shipping
 -- ----------------------------
 INSERT INTO `mmall_shipping` VALUES ('33', '2', '邱先生', null, '18695891383', '河南', '郑州', '郑东新区', '商鼎路东风南路升龙广场3号楼A座29楼魔飞公寓', null, '2018-11-13 09:59:26', '2018-11-13 09:59:26');
-INSERT INTO `mmall_shipping` VALUES ('35', '2', '邱先生', null, '18695891383', '河南', '郑州', '管城回族区', '商鼎路东风南路升龙广场3号楼A座29楼魔飞公寓', null, '2018-11-13 10:53:06', '2018-11-13 10:56:03');
+INSERT INTO `mmall_shipping` VALUES ('35', '22', '邱先生', null, '18695891383', '河南', '郑州', '管城回族区', '商鼎路东风南路升龙广场3号楼A座29楼魔飞公寓', null, '2018-11-13 10:53:06', '2018-11-13 10:56:03');
 
 -- ----------------------------
 -- Table structure for mmall_user
@@ -232,5 +237,5 @@ CREATE TABLE `mmall_user_token` (
 -- ----------------------------
 -- Records of mmall_user_token
 -- ----------------------------
-INSERT INTO `mmall_user_token` VALUES ('24', '2', '2018-12-06 14:13:49', '4482cef0ceec0ee1a07663a5c3a7bf34', '2018-11-02 14:11:05', '2018-11-06 14:13:49');
+INSERT INTO `mmall_user_token` VALUES ('24', '2', '2018-12-19 16:57:23', '2a665858d7520002c13f6ec1813375f5', '2018-11-02 14:11:05', '2018-11-19 16:57:23');
 INSERT INTO `mmall_user_token` VALUES ('25', '22', '2018-12-06 14:13:22', 'e7d5224c5007d8d635cbc69b89f131e8', '2018-11-06 14:13:22', '2018-11-06 14:13:22');
