@@ -1,6 +1,7 @@
 package com.shinvi.mall.dao;
 
 import com.shinvi.mall.pojo.domain.CartDo;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

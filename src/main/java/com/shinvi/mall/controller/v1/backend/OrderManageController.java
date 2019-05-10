@@ -44,4 +44,5 @@ public class OrderManageController {
         }
         return ServerResponse.success(orderService.shipOrder(orderNo));
     }
+
 }
